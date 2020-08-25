@@ -19,7 +19,7 @@ const Product = (props) => {
                 onClick={props.addToCart}
                 className={styles.add_to_cart}
             >
-                Add to cart
+                Добавить в корзину
             </button>
         </div>
     );
