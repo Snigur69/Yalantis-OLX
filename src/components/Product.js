@@ -27,7 +27,11 @@ const Product = (props) => {
 
 Product.propTypes = {
     addToCart: PropTypes.func,
-    product: PropTypes.object,
+    product: PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+        price: PropTypes.number,
+    }),
 };
 
 export default Product;

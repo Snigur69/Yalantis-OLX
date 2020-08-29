@@ -9,7 +9,7 @@ const Header = (props) => {
             <div className={styles.nav_wrap}>
                 <Link to="/">Каталог</Link>
             </div>
-            {props.summaryPrice !== undefined && (
+            {!props.hide && (
                 <div className={styles.cart_wrap}>
                     <Link to="/cart">
                         Корзина
@@ -21,7 +21,9 @@ const Header = (props) => {
         </div>
     );
 };
-
+Header.defaultProps = {
+    summaryPrice: 0,
+};
 Header.propTypes = {
     summaryPrice: PropTypes.number,
 };

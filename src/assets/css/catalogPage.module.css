@@ -30,3 +30,7 @@
     font-weight: bold;
     color: #64d6ff;
 }
+.loader {
+    margin-top: 60px;
+    text-align: center;
+}

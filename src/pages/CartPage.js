@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 const CartPage = (props) => {
     return (
         <div>
-            <Header />
+            <Header hide={true} />
             <div className={styles.cart_page}>
                 {props.products.length > 0 ? (
                     <CartTable

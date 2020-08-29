@@ -1,46 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import CartPage from "./pages/CartPage";
 import ProductPage from "./pages/ProductPage";
 import CatalogPage from "./pages/CatalogPage";
+import reducer from "./services/reducer";
 
 const App = () => {
-    const [cartProducts, setCardProducts] = useState([]);
+    const [cartProducts, dispatch] = useReducer(reducer, []);
     const [productsCount, setProductsCount] = useState(0);
     const [summaryPrice, setSummaryPrice] = useState(0);
 
     const addToCart = (e) => {
-        let newProduct = {
-            id: e.target.dataset.productid,
-            name: e.target.dataset.productname,
-            count: 1,
-            price: +e.target.dataset.productprice,
-            summaryPrice: +e.target.dataset.productprice,
-        };
-        let duplicatedIndex;
-        let duplicatedProduct = cartProducts.filter((el, ind) => {
-            if (newProduct.id === el.id) {
-                duplicatedIndex = ind;
-                return el;
-            }
+        dispatch({
+            type: "ADD_PRODUCT",
+            payload: e.target,
         });
-        if (duplicatedProduct.length) {
-            let copyCartProducts = [...cartProducts];
-            duplicatedProduct[0].count++;
-            duplicatedProduct[0].summaryPrice =
-                duplicatedProduct[0].count * duplicatedProduct[0].price;
-            copyCartProducts.splice(duplicatedIndex, 1, duplicatedProduct[0]);
-            setCardProducts(copyCartProducts);
-        } else {
-            setCardProducts([...cartProducts, newProduct]);
-        }
         setProductsCount(productsCount + 1);
         setSummaryPrice(summaryPrice + +e.target.dataset.productprice);
     };
 
     const removeProduct = (e) => {
-        let copyCartProducts = [...cartProducts];
         let removedPrice;
         let removedCount;
         let removedIndex;
@@ -51,9 +31,10 @@ const App = () => {
                 removedIndex = i;
             }
         }
-        copyCartProducts.splice(removedIndex, 1);
-
-        setCardProducts(copyCartProducts);
+        dispatch({
+            type: "REMOVE_PRODUCT",
+            index: removedIndex,
+        });
         setSummaryPrice(summaryPrice - removedPrice);
         setProductsCount(productsCount - removedCount);
     };

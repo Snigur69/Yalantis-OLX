@@ -4,9 +4,10 @@ import Header from "../components/Header";
 import styles from "../assets/css/productPage.module.css";
 import defaultImg from "../assets/img/productImage.gif";
 import PropTypes from "prop-types";
+import loader from "../assets/img/loader.gif";
 
 const ProductPage = (props) => {
-    const [product, setProduct] = useState(null);
+    const [product, setProduct] = useState({});
 
     useEffect(() => {
         api.get(`/products/${props.match.params.id}`)
@@ -14,11 +15,11 @@ const ProductPage = (props) => {
                 setProduct(response.data);
             })
             .catch((error) => {
-                throw new Error("Error with Users API");
+                throw new Error("Error with API");
             });
     }, []);
 
-    return product ? (
+    return product.id ? (
         <div>
             <Header summaryPrice={props.summaryPrice} />
             <div className={styles.product_page}>
@@ -43,7 +44,11 @@ const ProductPage = (props) => {
                 </div>
             </div>
         </div>
-    ) : null;
+    ) : (
+        <div className={styles.loader}>
+            <img src={loader} />
+        </div>
+    );
 };
 
 ProductPage.propTypes = {

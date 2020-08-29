@@ -4,9 +4,10 @@ import styles from "../assets/css/catalogPage.module.css";
 import Product from "../components/Product";
 import Header from "../components/Header";
 import PropTypes from "prop-types";
+import loader from "../assets/img/loader.gif";
 
 const CatalogPage = (props) => {
-    const [products, setProducts] = useState(null);
+    const [products, setProducts] = useState([]);
     const [pagesCount, setPagesCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -14,23 +15,23 @@ const CatalogPage = (props) => {
         setCurrentPage(+event.target.innerText);
         api.get(`/products?page=${+event.target.innerText}`)
             .then((response) => {
-                setProducts(response.data);
+                setProducts(response.data.items);
             })
             .catch((error) => {
-                throw new Error("Error with Users API");
+                throw new Error("Error with API");
             });
     };
 
     useEffect(() => {
         api.get(`/products?page=${currentPage}`)
             .then((response) => {
-                setProducts(response.data);
+                setProducts(response.data.items);
                 setPagesCount(
                     Math.ceil(response.data.totalItems / response.data.perPage)
                 );
             })
             .catch((error) => {
-                throw new Error("Error with Users API");
+                throw new Error("Error with API");
             });
     }, []);
 
@@ -39,12 +40,12 @@ const CatalogPage = (props) => {
         pages.push(i);
     }
 
-    return products ? (
+    return products.length ? (
         <div className={styles.catalog}>
             <Header summaryPrice={props.summaryPrice} />
             <h1>Каталог</h1>
             <div className={styles.products_wrap}>
-                {products.items.map((el) => {
+                {products.map((el) => {
                     return (
                         <Product
                             addToCart={props.addToCart}
@@ -78,7 +79,11 @@ const CatalogPage = (props) => {
             </div>
             <br />
         </div>
-    ) : null;
+    ) : (
+        <div className={styles.loader}>
+            <img src={loader} />
+        </div>
+    );
 };
 
 CatalogPage.propTypes = {
