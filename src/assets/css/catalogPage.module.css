@@ -1,0 +1,36 @@
+.catalog {
+    text-align: center;
+}
+.catalog h1 {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 45px;
+    letter-spacing: 0.05em;
+    color: #2e4077;
+}
+.products_wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.pagination {
+    margin: 30px auto;
+}
+.pagination a {
+    cursor: pointer;
+    margin: 0 15px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #263769;
+}
+.pagination .current_page {
+    font-size: 20px;
+    font-weight: bold;
+    color: #64d6ff;
+}
+.loader {
+    margin-top: 60px;
+    text-align: center;
+}

@@ -1,0 +1,44 @@
+.title {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 40px;
+    letter-spacing: 0.05em;
+    color: #2e4077;
+    margin: 0;
+}
+.price {
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 40px;
+    color: #64d6ff;
+    margin: 0 0 10px 0;
+}
+.add_to_cart {
+    background: #2e4077;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    padding: 10px 40px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.add_to_cart:hover {
+    color: #2e4077;
+    background: #fff;
+    border: 1px solid #2e4077;
+}
+.single_product {
+    width: 17%;
+    margin: 20px 10px;
+    padding: 25px 15px;
+    background: #ffffff;
+    border: 1px solid #e3e2e2;
+    box-sizing: border-box;
+}
+.single_product a {
+    text-decoration: none;
+}
