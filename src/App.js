@@ -1,42 +1,62 @@
-import React, { useState, useReducer } from "react";
+import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import CartPage from "./pages/CartPage";
 import ProductPage from "./pages/ProductPage";
 import CatalogPage from "./pages/CatalogPage";
-import reducer from "./services/reducer";
+import { connect } from "react-redux";
+import {
+    getProducts,
+    addProductToCart,
+    removeProductFromCart,
+    changeProductCount,
+    increseProductCount,
+    decreseProductCount,
+    setOrigins,
+    setPerPage,
+    changePriceRange,
+} from "./store/actions";
+import {
+    cartItemsSelector,
+    cartTotalSelector,
+    queryOptionsSelector,
+} from "./selectors/selectors";
 
-const App = () => {
-    const [cartProducts, dispatch] = useReducer(reducer, []);
-    const [productsCount, setProductsCount] = useState(0);
-    const [summaryPrice, setSummaryPrice] = useState(0);
-
+const App = (props) => {
     const addToCart = (e) => {
-        dispatch({
-            type: "ADD_PRODUCT",
-            payload: e.target,
-        });
-        setProductsCount(productsCount + 1);
-        setSummaryPrice(summaryPrice + +e.target.dataset.productprice);
+        let newProduct = {
+            id: e.target.dataset.productid,
+            name: e.target.dataset.productname,
+            count: 1,
+            price: +e.target.dataset.productprice,
+            summaryPrice: +e.target.dataset.productprice,
+        };
+        props.addProductToCart(newProduct);
     };
 
     const removeProduct = (e) => {
-        let removedPrice;
-        let removedCount;
         let removedIndex;
-        for (let i = 0; i < cartProducts.length; i++) {
-            if (e.target.dataset.productid === cartProducts[i].id) {
-                removedPrice = cartProducts[i].summaryPrice;
-                removedCount = cartProducts[i].count;
+        for (let i = 0; i < props.cart.length; i++) {
+            if (e.target.dataset.productid === props.cart[i].id) {
                 removedIndex = i;
             }
         }
-        dispatch({
-            type: "REMOVE_PRODUCT",
-            index: removedIndex,
-        });
-        setSummaryPrice(summaryPrice - removedPrice);
-        setProductsCount(productsCount - removedCount);
+        props.removeProductFromCart(removedIndex);
+    };
+
+    const changeProductCount = (e) => {
+        if (!isNaN(e.target.value)) {
+            props.changeProductCount(
+                e.target.dataset.id,
+                e.target.value.replace(/\D/, "")
+            );
+        }
+    };
+    const increseProductCount = (e) => {
+        props.increseProductCount(e.target.dataset.id);
+    };
+    const decreseProductCount = (e) => {
+        props.decreseProductCount(e.target.dataset.id);
     };
     return (
         <div className="store">
@@ -44,27 +64,37 @@ const App = () => {
                 <Switch>
                     <Route path="/cart">
                         <CartPage
-                            products={cartProducts}
-                            productsCount={productsCount}
-                            summaryPrice={summaryPrice}
+                            products={props.cart}
+                            productsCount={props.cartItems}
+                            summaryPrice={props.cartTotal}
                             removeProduct={removeProduct}
+                            changeProductCount={changeProductCount}
+                            increseProductCount={increseProductCount}
+                            decreseProductCount={decreseProductCount}
                         />
                     </Route>
                     <Route
                         path="/product/:id"
-                        render={(props) => (
+                        render={(innerProps) => (
                             <ProductPage
-                                {...props}
-                                summaryPrice={summaryPrice}
+                                {...innerProps}
                                 addToCart={addToCart}
+                                summaryPrice={props.cartTotal}
                             />
                         )}
                     />
 
                     <Route path="/">
                         <CatalogPage
-                            summaryPrice={summaryPrice}
+                            products={props.products}
+                            getProducts={props.getProducts}
+                            summaryPrice={props.cartTotal}
                             addToCart={addToCart}
+                            setOrigins={props.setOrigins}
+                            options={props.options}
+                            queryOptions={props.queryOptions}
+                            setPerPage={props.setPerPage}
+                            changePriceRange={props.changePriceRange}
                         />
                     </Route>
                 </Switch>
@@ -73,4 +103,27 @@ const App = () => {
     );
 };
 
-export default App;
+function mapStateToProps(state) {
+    return {
+        products: state.products,
+        cart: state.cart,
+        options: state.options,
+        cartItems: cartItemsSelector(state),
+        cartTotal: cartTotalSelector(state),
+        queryOptions: queryOptionsSelector(state),
+    };
+}
+
+let actions = {
+    getProducts,
+    addProductToCart,
+    removeProductFromCart,
+    changeProductCount,
+    increseProductCount,
+    decreseProductCount,
+    setOrigins,
+    setPerPage,
+    changePriceRange,
+};
+
+export default connect(mapStateToProps, actions)(App);

@@ -1,0 +1,54 @@
+.filter {
+    min-width: 250px;
+    max-width: 250px;
+    padding: 30px 15px;
+}
+.price_wrap {
+    display: flex;
+    align-items: center;
+    color: #676767;
+}
+.price_wrap input {
+    width: 70px;
+    margin: 0 10px;
+    height: 22px;
+}
+.price_wrap button {
+    background: #2e4077;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #ffffff;
+    padding: 5px 10px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.price_wrap button:hover {
+    border: 1px solid #2e4077;
+    color: #2e4077;
+    background: #fff;
+}
+.attr_name {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.05em;
+    color: #2e4077;
+    text-align: left;
+    margin-top: 20px;
+}
+.attr_wrap {
+    text-align: left;
+}
+.attr_wrap label {
+    color: #676767;
+}
+.attr_wrap select {
+    width: 150px;
+}
+.single_origin {
+    display: block;
+    margin-bottom: 15px;
+    text-align: left;
+}

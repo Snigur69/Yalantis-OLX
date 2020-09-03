@@ -61,3 +61,23 @@
     width: 14px;
     cursor: pointer;
 }
+.change_count {
+    background: #2e4077;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #ffffff;
+    padding: 5px 10px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.change_count:hover {
+    border: 1px solid #2e4077;
+    color: #2e4077;
+    background: #fff;
+}
+.count_input {
+    height: 22px;
+    width: 70px;
+    margin: 0 10px;
+}

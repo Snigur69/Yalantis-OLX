@@ -18,7 +18,6 @@ const ProductPage = (props) => {
                 throw new Error("Error with API");
             });
     }, []);
-
     return product.id ? (
         <div>
             <Header summaryPrice={props.summaryPrice} />

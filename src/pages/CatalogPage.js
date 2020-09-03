@@ -5,27 +5,49 @@ import Product from "../components/Product";
 import Header from "../components/Header";
 import PropTypes from "prop-types";
 import loader from "../assets/img/loader.gif";
+import Filter from "../components/Filter";
+import Pagination from "../components/Pagination";
 
 const CatalogPage = (props) => {
-    const [products, setProducts] = useState([]);
+    const [origins, setNewOrigins] = useState([]);
+    const [minValue, setminValue] = useState(0);
+    const [maxValue, setmaxValue] = useState(0);
     const [pagesCount, setPagesCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
     const getPage = (event) => {
         setCurrentPage(+event.target.innerText);
-        api.get(`/products?page=${+event.target.innerText}`)
-            .then((response) => {
-                setProducts(response.data.items);
-            })
-            .catch((error) => {
-                throw new Error("Error with API");
-            });
+    };
+
+    const getProductsByOrigin = (e) => {
+        setCurrentPage(1);
+        props.setOrigins(e.target.name, e.target.checked);
+    };
+
+    const changeMinPrice = (e) => {
+        if (!isNaN(e.target.value)) {
+            setminValue(e.target.value.replace(/\D/, ""));
+        }
+    };
+    const changeMaxPrice = (e) => {
+        if (!isNaN(e.target.value)) {
+            setmaxValue(e.target.value.replace(/\D/, ""));
+        }
+    };
+
+    const changePriceRange = () => {
+        props.changePriceRange(+minValue, +maxValue);
+    };
+
+    const perPageChange = (e) => {
+        setCurrentPage(1);
+        props.setPerPage(e.target.value);
     };
 
     useEffect(() => {
-        api.get(`/products?page=${currentPage}`)
+        api.get(`/products?${props.queryOptions}&page=${currentPage}`)
             .then((response) => {
-                setProducts(response.data.items);
+                props.getProducts(response.data.items);
                 setPagesCount(
                     Math.ceil(response.data.totalItems / response.data.perPage)
                 );
@@ -33,55 +55,77 @@ const CatalogPage = (props) => {
             .catch((error) => {
                 throw new Error("Error with API");
             });
-    }, []);
+
+        api.get(`/products-origins`)
+            .then((response) => {
+                let newOrigins = response.data.items.map((el) => {
+                    if (props.options.origins.includes(el.value)) {
+                        return {
+                            ...el,
+                            isChecked: true,
+                        };
+                    }
+                    return {
+                        ...el,
+                        isChecked: false,
+                    };
+                });
+                setNewOrigins(newOrigins);
+            })
+            .catch((error) => {
+                throw new Error("Error with API");
+            });
+
+        setminValue(props.options.minPrice);
+        setmaxValue(props.options.maxPrice);
+    }, [props.options, currentPage]);
 
     let pages = [];
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i);
     }
-
-    return products.length ? (
+    return (
         <div className={styles.catalog}>
             <Header summaryPrice={props.summaryPrice} />
             <h1>Каталог</h1>
-            <div className={styles.products_wrap}>
-                {products.map((el) => {
-                    return (
-                        <Product
-                            addToCart={props.addToCart}
-                            key={el.id}
-                            product={el}
-                        />
-                    );
-                })}
+            <div className={styles.catalog_wrap}>
+                <Filter
+                    getProductsByOrigin={getProductsByOrigin}
+                    changeMinPrice={changeMinPrice}
+                    changeMaxPrice={changeMaxPrice}
+                    changePriceRange={changePriceRange}
+                    perPageChange={perPageChange}
+                    minValue={minValue}
+                    maxValue={maxValue}
+                    origins={origins}
+                    options={props.options}
+                />
+                {props.products.length ? (
+                    <div className={styles.products_wrap}>
+                        {props.products.map((el) => {
+                            return (
+                                <Product
+                                    addToCart={props.addToCart}
+                                    key={el.id}
+                                    product={el}
+                                />
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <div className={styles.loader}>
+                        <img src={loader} />
+                    </div>
+                )}
             </div>
-            <div className={styles.pagination}>
-                {pages.map((el) => {
-                    if (el == currentPage) {
-                        return (
-                            <a
-                                className={styles.current_page}
-                                onClick={getPage}
-                                key={el}
-                                value={el}
-                            >
-                                {el}
-                            </a>
-                        );
-                    } else {
-                        return (
-                            <a onClick={getPage} key={el} value={el}>
-                                {el}
-                            </a>
-                        );
-                    }
-                })}
-            </div>
-            <br />
-        </div>
-    ) : (
-        <div className={styles.loader}>
-            <img src={loader} />
+            {pages.length > 1 && (
+                <Pagination
+                    pages={pages}
+                    setCurrentPage={setCurrentPage}
+                    currentPage={currentPage}
+                    getPage={getPage}
+                />
+            )}
         </div>
     );
 };
@@ -89,6 +133,18 @@ const CatalogPage = (props) => {
 CatalogPage.propTypes = {
     summaryPrice: PropTypes.number,
     addToCart: PropTypes.func,
+    products: PropTypes.array,
+    getProducts: PropTypes.func,
+    setOrigins: PropTypes.func,
+    options: PropTypes.shape({
+        perPage: PropTypes.number,
+        origins: PropTypes.array,
+        minPrice: PropTypes.number,
+        maxPrice: PropTypes.number,
+    }),
+    queryOptions: PropTypes.string,
+    setPerPage: PropTypes.func,
+    changePriceRange: PropTypes.func,
 };
 
 export default CatalogPage;

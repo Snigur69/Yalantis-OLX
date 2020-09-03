@@ -15,6 +15,9 @@ const CartPage = (props) => {
                         productsCount={props.productsCount}
                         summaryPrice={props.summaryPrice}
                         removeProduct={props.removeProduct}
+                        changeProductCount={props.changeProductCount}
+                        increseProductCount={props.increseProductCount}
+                        decreseProductCount={props.decreseProductCount}
                     />
                 ) : (
                     <div>
@@ -30,6 +33,9 @@ CartPage.propTypes = {
     productsCount: PropTypes.number,
     summaryPrice: PropTypes.number,
     removeProduct: PropTypes.func,
+    changeProductCount: PropTypes.func,
+    increseProductCount: PropTypes.func,
+    decreseProductCount: PropTypes.func,
 };
 
 export default CartPage;

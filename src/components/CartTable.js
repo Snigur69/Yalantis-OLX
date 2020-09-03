@@ -22,7 +22,28 @@ const CartTable = (props) => {
                         return (
                             <tr key={el.id}>
                                 <td>{el.name}</td>
-                                <td>{el.count}</td>
+                                <td>
+                                    <button
+                                        className={styles.change_count}
+                                        onClick={props.decreseProductCount}
+                                        data-id={el.id}
+                                    >
+                                        -
+                                    </button>
+                                    <input
+                                        className={styles.count_input}
+                                        onChange={props.changeProductCount}
+                                        data-id={el.id}
+                                        value={el.count}
+                                    />
+                                    <button
+                                        className={styles.change_count}
+                                        onClick={props.increseProductCount}
+                                        data-id={el.id}
+                                    >
+                                        +
+                                    </button>
+                                </td>
                                 <td>{el.price}</td>
                                 <td className={styles.price}>
                                     {el.summaryPrice}
@@ -64,5 +85,8 @@ CartTable.propTypes = {
     productsCount: PropTypes.number,
     summaryPrice: PropTypes.number,
     removeProduct: PropTypes.func,
+    decreseProductCount: PropTypes.func,
+    increseProductCount: PropTypes.func,
+    changeProductCount: PropTypes.func,
 };
 export default CartTable;
