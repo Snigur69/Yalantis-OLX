@@ -6,27 +6,27 @@ import defaultImg from "../assets/img/productImage.gif";
 import PropTypes from "prop-types";
 import loader from "../assets/img/loader.gif";
 
-const ProductPage = (props) => {
+const ProductPage = ({ summaryPrice, addToCart, match }) => {
     const [product, setProduct] = useState({});
 
     useEffect(() => {
-        api.get(`/products/${props.match.params.id}`)
+        api.get(`/products/${match.params.id}`)
             .then((response) => {
                 setProduct(response.data);
             })
             .catch((error) => {
                 throw new Error("Error with API");
             });
-    }, []);
+    }, [match.params.id]);
     return product.id ? (
         <div>
-            <Header summaryPrice={props.summaryPrice} />
+            <Header summaryPrice={summaryPrice} />
             <div className={styles.product_page}>
                 <div className={styles.image_wrap}>
-                    <img src={defaultImg} />
+                    <img src={defaultImg} alt="" />
                 </div>
                 <div className={styles.product_info}>
-                    <h1>{product.name}</h1>
+                    <h1 className={styles.product_title}>{product.name}</h1>
                     <p className={styles.info}>
                         Origin: <span>{product.origin}</span>
                     </p>
@@ -35,7 +35,7 @@ const ProductPage = (props) => {
                         data-productid={product.id}
                         data-productprice={product.price}
                         data-productname={product.name}
-                        onClick={props.addToCart}
+                        onClick={addToCart}
                         className={styles.add_to_cart}
                     >
                         Добавить в корзину
@@ -45,7 +45,7 @@ const ProductPage = (props) => {
         </div>
     ) : (
         <div className={styles.loader}>
-            <img src={loader} />
+            <img src={loader} alt="" />
         </div>
     );
 };

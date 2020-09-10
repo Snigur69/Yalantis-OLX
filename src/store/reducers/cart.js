@@ -9,6 +9,7 @@ export function cartReducer(state = initialState, action) {
                     duplicatedIndex = ind;
                     return el;
                 }
+                return false;
             });
             if (duplicatedProduct.length) {
                 let copyCartProducts = [...state];
@@ -37,6 +38,7 @@ export function cartReducer(state = initialState, action) {
                     duplicatedIndex = ind;
                     return el;
                 }
+                return false;
             });
             ++duplicatedProduct[0].count;
 
@@ -52,6 +54,7 @@ export function cartReducer(state = initialState, action) {
                     duplicatedIndex = ind;
                     return el;
                 }
+                return false;
             });
             --duplicatedProduct[0].count;
 
@@ -75,8 +78,9 @@ export function cartReducer(state = initialState, action) {
                     duplicatedIndex = ind;
                     return el;
                 }
+                return false;
             });
-            duplicatedProduct[0].count = +action.value;
+            duplicatedProduct[0].count = Number(action.value);
 
             duplicatedProduct[0].summaryPrice =
                 duplicatedProduct[0].count * duplicatedProduct[0].price;

@@ -1,22 +1,22 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "../assets/css/product.module.css";
 import defaultImg from "../assets/img/defaultImg.jpg";
 import PropTypes from "prop-types";
 
-const Product = (props) => {
+const Product = ({ addToCart, product }) => {
     return (
         <div className={styles.single_product}>
-            <Link to={`/product/${props.product.id}`}>
-                <img src={defaultImg} />
-                <p className={styles.title}>{props.product.name}</p>
+            <Link to={`/product/${product.id}`}>
+                <img src={defaultImg} alt="" />
+                <p className={styles.title}>{product.name}</p>
             </Link>
-            <p className={styles.price}>{props.product.price}</p>
+            <p className={styles.price}>{product.price}</p>
             <button
-                data-productid={props.product.id}
-                data-productprice={props.product.price}
-                data-productname={props.product.name}
-                onClick={props.addToCart}
+                data-productid={product.id}
+                data-productprice={product.price}
+                data-productname={product.name}
+                onClick={addToCart}
                 className={styles.add_to_cart}
             >
                 Добавить в корзину

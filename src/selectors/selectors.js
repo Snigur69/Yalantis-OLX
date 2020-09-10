@@ -1,7 +1,8 @@
 import { createSelector } from "reselect";
 
-const cartProductsSelector = (state) => state.cart;
-const optionsSelector = (state) => state.options;
+export const productsSelector = (state) => state.products;
+export const cartProductsSelector = (state) => state.cart;
+export const optionsSelector = (state) => state.options;
 
 export const cartItemsSelector = createSelector(
     cartProductsSelector,

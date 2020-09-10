@@ -3,10 +3,17 @@ import PropTypes from "prop-types";
 import xmark from "../assets/img/xmark.png";
 import styles from "../assets/css/carttable.module.css";
 
-const CartTable = (props) => {
+const CartTable = ({
+    products,
+    productsCount,
+    summaryPrice,
+    removeProduct,
+    changeProductCount,
+    increseProductCount,
+    decreseProductCount,
+}) => {
     return (
         <div>
-            <h1>Корзина</h1>
             <table className={styles.cart_table}>
                 <thead>
                     <tr>
@@ -18,27 +25,31 @@ const CartTable = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.products.map((el) => {
+                    {products.map((el) => {
                         return (
                             <tr key={el.id}>
                                 <td>{el.name}</td>
                                 <td>
                                     <button
                                         className={styles.change_count}
-                                        onClick={props.decreseProductCount}
+                                        onClick={decreseProductCount}
                                         data-id={el.id}
                                     >
                                         -
                                     </button>
                                     <input
                                         className={styles.count_input}
-                                        onChange={props.changeProductCount}
+                                        onChange={changeProductCount}
                                         data-id={el.id}
                                         value={el.count}
+                                        onPaste={(e) => {
+                                            e.preventDefault();
+                                            return false;
+                                        }}
                                     />
                                     <button
                                         className={styles.change_count}
-                                        onClick={props.increseProductCount}
+                                        onClick={increseProductCount}
                                         data-id={el.id}
                                     >
                                         +
@@ -50,7 +61,8 @@ const CartTable = (props) => {
                                 </td>
                                 <td className={styles.xmark}>
                                     <img
-                                        onClick={props.removeProduct}
+                                        alt=""
+                                        onClick={removeProduct}
                                         data-productid={el.id}
                                         src={xmark}
                                     />
@@ -63,16 +75,14 @@ const CartTable = (props) => {
                             Количество товаров
                         </td>
                         <td className={styles.summary_count}>
-                            {props.productsCount}
+                            {productsCount}
                         </td>
                     </tr>
                     <tr className={styles.summaryPrice}>
                         <td className={styles.summary_price_title} colSpan="3">
                             Общая стоимость
                         </td>
-                        <td className={styles.summary_price}>
-                            {props.summaryPrice}
-                        </td>
+                        <td className={styles.summary_price}>{summaryPrice}</td>
                     </tr>
                 </tbody>
             </table>

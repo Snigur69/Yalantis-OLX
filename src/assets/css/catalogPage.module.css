@@ -1,7 +1,7 @@
 .catalog {
     text-align: center;
 }
-.catalog h1 {
+.catalog_title {
     font-style: normal;
     font-weight: bold;
     font-size: 45px;
@@ -14,7 +14,6 @@
     justify-content: center;
     min-width: calc(100% - 500px);
 }
-
 .loader {
     margin-top: 60px;
     text-align: center;

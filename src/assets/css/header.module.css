@@ -12,7 +12,7 @@
 .nav_wrap {
     padding-left: 15px;
 }
-.nav_wrap a {
+.nav_link {
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
@@ -20,16 +20,8 @@
     letter-spacing: 0.05em;
     color: #ffffff;
     text-align: center;
+    text-decoration: none;
 }
 .cart_wrap {
     padding-right: 15px;
-}
-.cart_wrap a {
-    text-decoration: none;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 21px;
-    letter-spacing: 0.05em;
-    color: #ffffff;
-    text-align: center;
 }

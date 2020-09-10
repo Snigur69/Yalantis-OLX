@@ -25,7 +25,7 @@ export function optionsReducer(state = initialState, action) {
         case "SET_PER_PAGE": {
             return {
                 ...state,
-                perPage: +action.perPage,
+                perPage: Number(action.perPage),
             };
         }
         case "CHANGE_PRICE_RANGE": {
@@ -38,8 +38,8 @@ export function optionsReducer(state = initialState, action) {
             }
             return {
                 ...state,
-                minPrice: +action.minPrice,
-                maxPrice: +action.maxPrice,
+                minPrice: Number(action.minPrice),
+                maxPrice: Number(action.maxPrice),
             };
         }
         default:

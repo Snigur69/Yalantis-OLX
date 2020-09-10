@@ -20,43 +20,60 @@ import {
     cartItemsSelector,
     cartTotalSelector,
     queryOptionsSelector,
+    cartProductsSelector,
+    productsSelector,
+    optionsSelector,
 } from "./selectors/selectors";
 
-const App = (props) => {
+const App = ({
+    products,
+    cart,
+    options,
+    cartItems,
+    cartTotal,
+    queryOptions,
+    getProductsDispatch,
+    addProductToCartDispatch,
+    removeProductFromCartDispatch,
+    changeProductCountDispatch,
+    increseProductCountDispatch,
+    decreseProductCountDispacth,
+    setOriginsDispatch,
+    setPerPageDispatch,
+    changePriceRangeDispatch,
+}) => {
     const addToCart = (e) => {
-        let newProduct = {
+        const newProduct = {
             id: e.target.dataset.productid,
             name: e.target.dataset.productname,
             count: 1,
-            price: +e.target.dataset.productprice,
-            summaryPrice: +e.target.dataset.productprice,
+            price: Number(e.target.dataset.productprice),
+            summaryPrice: Number(e.target.dataset.productprice),
         };
-        props.addProductToCart(newProduct);
+        addProductToCartDispatch(newProduct);
     };
 
     const removeProduct = (e) => {
         let removedIndex;
-        for (let i = 0; i < props.cart.length; i++) {
-            if (e.target.dataset.productid === props.cart[i].id) {
+        for (let i = 0; i < cart.length; i++) {
+            if (e.target.dataset.productid === cart[i].id) {
                 removedIndex = i;
             }
         }
-        props.removeProductFromCart(removedIndex);
+        removeProductFromCartDispatch(removedIndex);
     };
 
-    const changeProductCount = (e) => {
-        if (!isNaN(e.target.value)) {
-            props.changeProductCount(
-                e.target.dataset.id,
-                e.target.value.replace(/\D/, "")
-            );
-        }
+    const handleChangeProductCount = (e) => {
+        changeProductCountDispatch(
+            e.target.dataset.id,
+            e.target.value.replace(/\D/, "")
+        );
     };
-    const increseProductCount = (e) => {
-        props.increseProductCount(e.target.dataset.id);
+    const handleIncreseProductCount = (e) => {
+        increseProductCountDispatch(e.target.dataset.id);
     };
-    const decreseProductCount = (e) => {
-        props.decreseProductCount(e.target.dataset.id);
+    const handleDecreseProductCount = (e) => {
+        decreseProductCountDispacth(e.target.dataset.id);
     };
     return (
         <div className="store">
@@ -64,13 +81,13 @@ const App = (props) => {
                 <Switch>
                     <Route path="/cart">
                         <CartPage
-                            products={props.cart}
-                            productsCount={props.cartItems}
-                            summaryPrice={props.cartTotal}
+                            products={cart}
+                            productsCount={cartItems}
+                            summaryPrice={cartTotal}
                             removeProduct={removeProduct}
-                            changeProductCount={changeProductCount}
-                            increseProductCount={increseProductCount}
-                            decreseProductCount={decreseProductCount}
+                            changeProductCount={handleChangeProductCount}
+                            increseProductCount={handleIncreseProductCount}
+                            decreseProductCount={handleDecreseProductCount}
                         />
                     </Route>
                     <Route
@@ -79,22 +96,22 @@ const App = (props) => {
                             <ProductPage
                                 {...innerProps}
                                 addToCart={addToCart}
-                                summaryPrice={props.cartTotal}
+                                summaryPrice={cartTotal}
                             />
                         )}
                     />
 
                     <Route path="/">
                         <CatalogPage
-                            products={props.products}
-                            getProducts={props.getProducts}
-                            summaryPrice={props.cartTotal}
+                            products={products}
+                            getProducts={getProductsDispatch}
+                            summaryPrice={cartTotal}
                             addToCart={addToCart}
-                            setOrigins={props.setOrigins}
-                            options={props.options}
-                            queryOptions={props.queryOptions}
-                            setPerPage={props.setPerPage}
-                            changePriceRange={props.changePriceRange}
+                            setOrigins={setOriginsDispatch}
+                            options={options}
+                            queryOptions={queryOptions}
+                            setPerPage={setPerPageDispatch}
+                            changePriceRange={changePriceRangeDispatch}
                         />
                     </Route>
                 </Switch>
@@ -105,25 +122,25 @@ const App = (props) => {
 
 function mapStateToProps(state) {
     return {
-        products: state.products,
-        cart: state.cart,
-        options: state.options,
+        products: productsSelector(state),
+        cart: cartProductsSelector(state),
+        options: optionsSelector(state),
         cartItems: cartItemsSelector(state),
         cartTotal: cartTotalSelector(state),
         queryOptions: queryOptionsSelector(state),
     };
 }
 
-let actions = {
-    getProducts,
-    addProductToCart,
-    removeProductFromCart,
-    changeProductCount,
-    increseProductCount,
-    decreseProductCount,
-    setOrigins,
-    setPerPage,
-    changePriceRange,
+const mapDispatchToProps = {
+    getProductsDispatch: getProducts,
+    addProductToCartDispatch: addProductToCart,
+    removeProductFromCartDispatch: removeProductFromCart,
+    changeProductCountDispatch: changeProductCount,
+    increseProductCountDispatch: increseProductCount,
+    decreseProductCountDispacth: decreseProductCount,
+    setOriginsDispatch: setOrigins,
+    setPerPageDispatch: setPerPage,
+    changePriceRangeDispatch: changePriceRange,
 };
 
-export default connect(mapStateToProps, actions)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

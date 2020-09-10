@@ -1,7 +1,7 @@
 .pagination {
     margin: 30px auto;
 }
-.pagination a {
+.pagination .page {
     cursor: pointer;
     margin: 0 15px;
     font-style: normal;
@@ -9,6 +9,7 @@
     font-size: 18px;
     line-height: 21px;
     color: #263769;
+    display: inline;
 }
 .pagination .current_page {
     font-size: 20px;

@@ -1,4 +1,4 @@
-let initialState = [];
+const initialState = [];
 
 export function productsReducer(state = initialState, action) {
     switch (action.type) {

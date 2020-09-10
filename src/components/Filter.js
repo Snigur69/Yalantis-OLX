@@ -2,7 +2,17 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "../assets/css/filter.module.css";
 
-const Filter = (props) => {
+const Filter = ({
+    getProductsByOrigin,
+    changeMinPrice,
+    changeMaxPrice,
+    changePriceRange,
+    perPageChange,
+    minValue,
+    maxValue,
+    origins,
+    options,
+}) => {
     return (
         <div className={styles.filter}>
             <div>
@@ -10,26 +20,41 @@ const Filter = (props) => {
                 <div className={styles.price_wrap}>
                     от
                     <input
-                        value={props.minValue}
-                        onChange={props.changeMinPrice}
+                        className={styles.price_input}
+                        value={minValue}
+                        onChange={changeMinPrice}
+                        onPaste={(e) => {
+                            e.preventDefault();
+                            return false;
+                        }}
                     />
                     до
                     <input
-                        value={props.maxValue}
-                        onChange={props.changeMaxPrice}
+                        className={styles.price_input}
+                        value={maxValue}
+                        onChange={changeMaxPrice}
+                        onPaste={(e) => {
+                            e.preventDefault();
+                            return false;
+                        }}
                     />
-                    <button onClick={props.changePriceRange}>OK</button>
+                    <button
+                        className={styles.price_submit}
+                        onClick={changePriceRange}
+                    >
+                        OK
+                    </button>
                 </div>
             </div>
 
             <p className={styles.attr_name}>Страна происхождения:</p>
             <div className={styles.attr_wrap}>
-                {props.origins.map((el) => {
+                {origins.map((el) => {
                     return (
-                        <div key={el.value} className={styles.single_origin}>
+                        <div key={el.id} className={styles.single_origin}>
                             <label>
                                 <input
-                                    onChange={props.getProductsByOrigin}
+                                    onChange={getProductsByOrigin}
                                     id={el.value}
                                     type="checkbox"
                                     name={el.value}
@@ -43,10 +68,7 @@ const Filter = (props) => {
             </div>
             <p className={styles.attr_name}>Количество товаров на странице</p>
             <div className={styles.attr_wrap}>
-                <select
-                    value={props.options.perPage}
-                    onChange={props.perPageChange}
-                >
+                <select value={options.perPage} onChange={perPageChange}>
                     <option value="50">50</option>
                     <option value="25">25</option>
                     <option value="10">10</option>

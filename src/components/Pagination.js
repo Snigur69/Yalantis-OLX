@@ -2,38 +2,49 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "../assets/css/pagination.module.css";
 
-const Pagination = (props) => {
+const Pagination = ({ pages, setCurrentPage, currentPage, getPage }) => {
+    const handlePrevPage = () => {
+        setCurrentPage(currentPage - 1);
+    };
+    const handleNextPage = () => {
+        setCurrentPage(currentPage + 1);
+    };
     return (
         <div className={styles.pagination}>
-            {props.currentPage !== 1 && (
-                <a onClick={(e) => props.setCurrentPage(props.currentPage - 1)}>
+            {currentPage !== 1 && (
+                <p className={styles.page} onClick={handlePrevPage}>
                     🡸
-                </a>
+                </p>
             )}
-            {props.pages.map((el) => {
-                if (el == props.currentPage) {
+            {pages.map((el) => {
+                if (el === currentPage) {
                     return (
-                        <a
-                            className={styles.current_page}
-                            onClick={props.getPage}
-                            key={el}
+                        <p
+                            className={styles.current_page + " " + styles.page}
+                            onClick={getPage}
+                            key={`pageid${el}`}
                             value={el}
                         >
                             {el}
-                        </a>
+                        </p>
                     );
                 } else {
                     return (
-                        <a onClick={props.getPage} key={el} value={el}>
+                        <p
+                            className={styles.page}
+                            onClick={getPage}
+                            key={`pageid${el}`}
+                            value={el}
+                        >
                             {el}
-                        </a>
+                        </p>
                     );
                 }
             })}
-            {props.currentPage !== props.pages.length && (
-                <a onClick={(e) => props.setCurrentPage(props.currentPage + 1)}>
+            {currentPage !== pages.length && (
+                <p className={styles.page} onClick={handleNextPage}>
                     🡺
-                </a>
+                </p>
             )}
         </div>
     );

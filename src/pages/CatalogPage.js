@@ -8,7 +8,17 @@ import loader from "../assets/img/loader.gif";
 import Filter from "../components/Filter";
 import Pagination from "../components/Pagination";
 
-const CatalogPage = (props) => {
+const CatalogPage = ({
+    summaryPrice,
+    addToCart,
+    products,
+    getProducts,
+    setOrigins,
+    options,
+    queryOptions,
+    setPerPage,
+    changePriceRange,
+}) => {
     const [origins, setNewOrigins] = useState([]);
     const [minValue, setminValue] = useState(0);
     const [maxValue, setmaxValue] = useState(0);
@@ -21,33 +31,29 @@ const CatalogPage = (props) => {
 
     const getProductsByOrigin = (e) => {
         setCurrentPage(1);
-        props.setOrigins(e.target.name, e.target.checked);
+        setOrigins(e.target.name, e.target.checked);
     };
 
     const changeMinPrice = (e) => {
-        if (!isNaN(e.target.value)) {
-            setminValue(e.target.value.replace(/\D/, ""));
-        }
+        setminValue(e.target.value.replace(/\D/, ""));
     };
     const changeMaxPrice = (e) => {
-        if (!isNaN(e.target.value)) {
-            setmaxValue(e.target.value.replace(/\D/, ""));
-        }
+        setmaxValue(e.target.value.replace(/\D/, ""));
     };
 
-    const changePriceRange = () => {
-        props.changePriceRange(+minValue, +maxValue);
+    const handleChangePriceRange = () => {
+        changePriceRange(Number(minValue), Number(maxValue));
     };
 
     const perPageChange = (e) => {
         setCurrentPage(1);
-        props.setPerPage(e.target.value);
+        setPerPage(e.target.value);
     };
 
     useEffect(() => {
-        api.get(`/products?${props.queryOptions}&page=${currentPage}`)
+        api.get(`/products?${queryOptions}&page=${currentPage}`)
             .then((response) => {
-                props.getProducts(response.data.items);
+                getProducts(response.data.items);
                 setPagesCount(
                     Math.ceil(response.data.totalItems / response.data.perPage)
                 );
@@ -58,15 +64,18 @@ const CatalogPage = (props) => {
 
         api.get(`/products-origins`)
             .then((response) => {
-                let newOrigins = response.data.items.map((el) => {
-                    if (props.options.origins.includes(el.value)) {
+                let originId = 0;
+                const newOrigins = response.data.items.map((el) => {
+                    if (options.origins.includes(el.value)) {
                         return {
                             ...el,
+                            id: originId++,
                             isChecked: true,
                         };
                     }
                     return {
                         ...el,
+                        id: originId++,
                         isChecked: false,
                     };
                 });
@@ -75,10 +84,9 @@ const CatalogPage = (props) => {
             .catch((error) => {
                 throw new Error("Error with API");
             });
-
-        setminValue(props.options.minPrice);
-        setmaxValue(props.options.maxPrice);
-    }, [props.options, currentPage]);
+        setminValue(options.minPrice);
+        setmaxValue(options.maxPrice);
+    }, [options, currentPage, getProducts, queryOptions]);
 
     let pages = [];
     for (let i = 1; i <= pagesCount; i++) {
@@ -86,26 +94,26 @@ const CatalogPage = (props) => {
     }
     return (
         <div className={styles.catalog}>
-            <Header summaryPrice={props.summaryPrice} />
-            <h1>Каталог</h1>
+            <Header summaryPrice={summaryPrice} />
+            <h1 className={styles.catalog_title}>Каталог</h1>
             <div className={styles.catalog_wrap}>
                 <Filter
                     getProductsByOrigin={getProductsByOrigin}
                     changeMinPrice={changeMinPrice}
                     changeMaxPrice={changeMaxPrice}
-                    changePriceRange={changePriceRange}
+                    changePriceRange={handleChangePriceRange}
                     perPageChange={perPageChange}
                     minValue={minValue}
                     maxValue={maxValue}
                     origins={origins}
-                    options={props.options}
+                    options={options}
                 />
-                {props.products.length ? (
+                {products.length ? (
                     <div className={styles.products_wrap}>
-                        {props.products.map((el) => {
+                        {products.map((el) => {
                             return (
                                 <Product
-                                    addToCart={props.addToCart}
+                                    addToCart={addToCart}
                                     key={el.id}
                                     product={el}
                                 />
@@ -114,7 +122,7 @@ const CatalogPage = (props) => {
                     </div>
                 ) : (
                     <div className={styles.loader}>
-                        <img src={loader} />
+                        <img src={loader} alt="" />
                     </div>
                 )}
             </div>

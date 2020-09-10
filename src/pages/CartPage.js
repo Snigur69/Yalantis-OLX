@@ -4,24 +4,35 @@ import styles from "../assets/css/cartPage.module.css";
 import CartTable from "../components/CartTable";
 import PropTypes from "prop-types";
 
-const CartPage = (props) => {
+const CartPage = ({
+    products,
+    productsCount,
+    summaryPrice,
+    removeProduct,
+    changeProductCount,
+    increseProductCount,
+    decreseProductCount,
+}) => {
     return (
         <div>
             <Header hide={true} />
             <div className={styles.cart_page}>
-                {props.products.length > 0 ? (
-                    <CartTable
-                        products={props.products}
-                        productsCount={props.productsCount}
-                        summaryPrice={props.summaryPrice}
-                        removeProduct={props.removeProduct}
-                        changeProductCount={props.changeProductCount}
-                        increseProductCount={props.increseProductCount}
-                        decreseProductCount={props.decreseProductCount}
-                    />
+                {products.length > 0 ? (
+                    <>
+                        <h1 className={styles.cart_title}>Корзина</h1>
+                        <CartTable
+                            products={products}
+                            productsCount={productsCount}
+                            summaryPrice={summaryPrice}
+                            removeProduct={removeProduct}
+                            changeProductCount={changeProductCount}
+                            increseProductCount={increseProductCount}
+                            decreseProductCount={decreseProductCount}
+                        />
+                    </>
                 ) : (
                     <div>
-                        <h1>Корзина пуста</h1>
+                        <h1 className={styles.cart_title}>Корзина пуста</h1>
                     </div>
                 )}
             </div>
