@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "../assets/css/pagination.module.css";
+
+import styles from "./styles.module.css";
 
 const Pagination = ({ pages, setCurrentPage, currentPage, getPage }) => {
     const handlePrevPage = () => {

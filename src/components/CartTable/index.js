@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import xmark from "../assets/img/xmark.png";
-import styles from "../assets/css/carttable.module.css";
+
+import styles from "./styles.module.css";
+import xmark from "../../assets/img/xmark.png";
 
 const CartTable = ({
     products,

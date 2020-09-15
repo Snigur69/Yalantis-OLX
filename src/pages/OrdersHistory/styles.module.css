@@ -1,0 +1,21 @@
+.history {
+    text-align: center;
+}
+.title {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 45px;
+    letter-spacing: 0.05em;
+    color: #2e4077;
+}
+.order_list > a {
+    display: block;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: 0.05em;
+    color: #2e4077;
+    margin: 10px auto;
+    width: fit-content;
+}

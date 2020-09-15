@@ -1,0 +1,60 @@
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { token } from "../../constants/constants";
+
+import Products from "../../containers/Products/index";
+
+const MyProductsPage = ({
+    summaryPrice,
+    setOrigins,
+    options,
+    queryOptions,
+    setPerPage,
+    changePriceRange,
+    openModal,
+    origins,
+    editProductModal,
+}) => {
+    const [products, setProducts] = useState([]);
+
+    return (
+        <>
+            <Products
+                editable={"editable=true"}
+                title="Мои товары"
+                token={token}
+                button="Редактировать"
+                openModal={openModal}
+                origins={origins}
+                products={products}
+                getProducts={setProducts}
+                summaryPrice={summaryPrice}
+                addToCart={editProductModal}
+                setOrigins={setOrigins}
+                options={options}
+                queryOptions={queryOptions}
+                setPerPage={setPerPage}
+                changePriceRange={changePriceRange}
+            />
+        </>
+    );
+};
+
+MyProductsPage.propTypes = {
+    summaryPrice: PropTypes.number,
+    setOrigins: PropTypes.func,
+    options: PropTypes.shape({
+        perPage: PropTypes.number,
+        origins: PropTypes.array,
+        minPrice: PropTypes.number,
+        maxPrice: PropTypes.number,
+    }),
+    queryOptions: PropTypes.string,
+    setPerPage: PropTypes.func,
+    changePriceRange: PropTypes.func,
+    openModal: PropTypes.func,
+    origins: PropTypes.array,
+    editProductModal: PropTypes.func,
+};
+
+export default MyProductsPage;

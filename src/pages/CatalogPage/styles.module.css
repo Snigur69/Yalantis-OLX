@@ -1,0 +1,24 @@
+.catalog {
+    text-align: center;
+}
+.catalog_title {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 45px;
+    letter-spacing: 0.05em;
+    color: #2e4077;
+}
+.products_wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-width: calc(100% - 500px);
+}
+.loader {
+    margin-top: 60px;
+    text-align: center;
+    min-width: calc(100% - 400px);
+}
+.catalog_wrap {
+    display: flex;
+}

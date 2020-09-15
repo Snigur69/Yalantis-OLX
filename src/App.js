@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import "./App.css";
-import CartPage from "./pages/CartPage";
-import ProductPage from "./pages/ProductPage";
-import CatalogPage from "./pages/CatalogPage";
+import api from "./services/api";
 import { connect } from "react-redux";
+
+import CartPage from "./pages/CartPage/index";
+import ProductPage from "./pages/ProductPage/index";
+import CatalogPage from "./pages/CatalogPage/index";
+import MyProductsPage from "./pages/MyProductsPage/index";
+import CreateProduct from "./containers/CreateProduct";
+import OrdersHistory from "./pages/OrdersHistory";
+import OrderPage from "./pages/OrderPage";
+
+import "./App.css";
+
 import {
     getProducts,
     addProductToCart,
@@ -15,6 +23,10 @@ import {
     setOrigins,
     setPerPage,
     changePriceRange,
+    openModal,
+    closeModal,
+    getOrigins,
+    clearCart,
 } from "./store/actions";
 import {
     cartItemsSelector,
@@ -23,6 +35,9 @@ import {
     cartProductsSelector,
     productsSelector,
     optionsSelector,
+    modalStateSelector,
+    currentProductSelector,
+    globalOriginsSelector,
 } from "./selectors/selectors";
 
 const App = ({
@@ -41,7 +56,27 @@ const App = ({
     setOriginsDispatch,
     setPerPageDispatch,
     changePriceRangeDispatch,
+    openModalDispatch,
+    closeModalDispatch,
+    modal,
+    currentProduct,
+    getOriginsDispatch,
+    origins,
+    clearCartDispatch,
 }) => {
+    useEffect(() => {
+        api({
+            method: "get",
+            url: "/products-origins",
+        })
+            .then((response) => {
+                getOriginsDispatch(response.data.items);
+            })
+            .catch((error) => {
+                throw new Error("Error with API");
+            });
+    }, [getOriginsDispatch]);
+
     const addToCart = (e) => {
         const newProduct = {
             id: e.target.dataset.productid,
@@ -75,12 +110,26 @@ const App = ({
     const handleDecreseProductCount = (e) => {
         decreseProductCountDispacth(e.target.dataset.id);
     };
+    const editProductModal = (e) => {
+        openModalDispatch({
+            id: e.target.dataset.productid,
+            name: e.target.dataset.productname,
+            price: Number(e.target.dataset.productprice),
+            origin: e.target.dataset.origin,
+        });
+    };
+    const handleOpenModal = () => {
+        openModalDispatch();
+    };
+
     return (
         <div className="store">
             <Router>
                 <Switch>
                     <Route path="/cart">
                         <CartPage
+                            clearCart={clearCartDispatch}
+                            openModal={handleOpenModal}
                             products={cart}
                             productsCount={cartItems}
                             summaryPrice={cartTotal}
@@ -96,13 +145,46 @@ const App = ({
                             <ProductPage
                                 {...innerProps}
                                 addToCart={addToCart}
+                                openModal={handleOpenModal}
                                 summaryPrice={cartTotal}
                             />
                         )}
                     />
+                    <Route
+                        path="/orders/:id"
+                        render={(innerProps) => (
+                            <OrderPage
+                                {...innerProps}
+                                openModal={handleOpenModal}
+                                summaryPrice={cartTotal}
+                            />
+                        )}
+                    />
+                    <Route path="/my-products">
+                        <MyProductsPage
+                            editProductModal={editProductModal}
+                            openModal={handleOpenModal}
+                            summaryPrice={cartTotal}
+                            setOrigins={setOriginsDispatch}
+                            options={options}
+                            queryOptions={queryOptions}
+                            setPerPage={setPerPageDispatch}
+                            changePriceRange={changePriceRangeDispatch}
+                            origins={origins}
+                        />
+                    </Route>
+
+                    <Route path="/history">
+                        <OrdersHistory
+                            openModal={handleOpenModal}
+                            summaryPrice={cartTotal}
+                        />
+                    </Route>
 
                     <Route path="/">
                         <CatalogPage
+                            openModal={handleOpenModal}
+                            origins={origins}
                             products={products}
                             getProducts={getProductsDispatch}
                             summaryPrice={cartTotal}
@@ -116,6 +198,13 @@ const App = ({
                     </Route>
                 </Switch>
             </Router>
+            {modal && (
+                <CreateProduct
+                    currentProduct={currentProduct}
+                    closeModal={closeModalDispatch}
+                    origins={origins}
+                />
+            )}
         </div>
     );
 };
@@ -128,6 +217,9 @@ function mapStateToProps(state) {
         cartItems: cartItemsSelector(state),
         cartTotal: cartTotalSelector(state),
         queryOptions: queryOptionsSelector(state),
+        modal: modalStateSelector(state),
+        currentProduct: currentProductSelector(state),
+        origins: globalOriginsSelector(state),
     };
 }
 
@@ -141,6 +233,10 @@ const mapDispatchToProps = {
     setOriginsDispatch: setOrigins,
     setPerPageDispatch: setPerPage,
     changePriceRangeDispatch: changePriceRange,
+    openModalDispatch: openModal,
+    closeModalDispatch: closeModal,
+    getOriginsDispatch: getOrigins,
+    clearCartDispatch: clearCart,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

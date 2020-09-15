@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import styles from "../assets/css/product.module.css";
-import defaultImg from "../assets/img/defaultImg.jpg";
 import PropTypes from "prop-types";
 
-const Product = ({ addToCart, product }) => {
+import defaultImg from "../../assets/img/defaultImg.jpg";
+import styles from "./styles.module.css";
+
+const Product = ({ addToCart, product, button }) => {
     return (
         <div className={styles.single_product}>
             <Link to={`/product/${product.id}`}>
@@ -16,10 +17,11 @@ const Product = ({ addToCart, product }) => {
                 data-productid={product.id}
                 data-productprice={product.price}
                 data-productname={product.name}
+                data-origin={product.origin}
                 onClick={addToCart}
                 className={styles.add_to_cart}
             >
-                Добавить в корзину
+                {button}
             </button>
         </div>
     );
@@ -32,6 +34,7 @@ Product.propTypes = {
         name: PropTypes.string,
         price: PropTypes.number,
     }),
+    button: PropTypes.string,
 };
 
 export default Product;
