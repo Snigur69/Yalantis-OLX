@@ -1,20 +1,22 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styles from "../assets/css/header.module.css";
 
-const Header = (props) => {
+const Header = ({ summaryPrice, hide }) => {
     return (
         <div className={styles.header}>
             <div className={styles.nav_wrap}>
-                <Link to="/">Каталог</Link>
+                <Link className={styles.nav_link} to="/">
+                    Каталог
+                </Link>
             </div>
-            {!props.hide && (
+            {!hide && (
                 <div className={styles.cart_wrap}>
-                    <Link to="/cart">
+                    <Link className={styles.nav_link} to="/cart">
                         Корзина
                         <br />
-                        {props.summaryPrice}
+                        {summaryPrice}
                     </Link>
                 </div>
             )}
