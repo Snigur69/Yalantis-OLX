@@ -1,19 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 
 import styles from "./styles.module.css";
 
-const Portal = ({ children, el = "div" }) => {
-    const [container] = useState(document.createElement(el));
+const Portal = ({ children }) => {
+    const container = document.getElementById("modal");
 
     useEffect(() => {
-        document.body.appendChild(container);
         container.setAttribute("class", styles.wrapper);
         document.body.style.overflow = "hidden";
-
         return () => {
-            document.body.removeChild(container);
+            container.setAttribute("class", "");
             document.body.style.overflow = "auto";
         };
     }, [container]);
@@ -22,7 +20,6 @@ const Portal = ({ children, el = "div" }) => {
 };
 
 Portal.propTypes = {
-    el: PropTypes.string,
     children: PropTypes.element.isRequired,
 };
 

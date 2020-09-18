@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { token } from "../../constants/constants";
+import { API_TOKEN } from "../../constants/constants";
 
 import Products from "../../containers/Products/index";
 
@@ -18,25 +18,23 @@ const MyProductsPage = ({
     const [products, setProducts] = useState([]);
 
     return (
-        <>
-            <Products
-                editable={"editable=true"}
-                title="Мои товары"
-                token={token}
-                button="Редактировать"
-                openModal={openModal}
-                origins={origins}
-                products={products}
-                getProducts={setProducts}
-                summaryPrice={summaryPrice}
-                addToCart={editProductModal}
-                setOrigins={setOrigins}
-                options={options}
-                queryOptions={queryOptions}
-                setPerPage={setPerPage}
-                changePriceRange={changePriceRange}
-            />
-        </>
+        <Products
+            editable={"editable=true"}
+            title="Мои товары"
+            token={API_TOKEN}
+            button="Редактировать"
+            openModal={openModal}
+            origins={origins}
+            products={products}
+            getProducts={setProducts}
+            summaryPrice={summaryPrice}
+            addToCart={editProductModal}
+            setOrigins={setOrigins}
+            options={options}
+            queryOptions={queryOptions}
+            setPerPage={setPerPage}
+            changePriceRange={changePriceRange}
+        />
     );
 };
 

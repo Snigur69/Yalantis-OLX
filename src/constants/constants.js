@@ -1,7 +1,15 @@
 export const PRODUCTS_API =
     "https://yalantis-react-school-api.yalantis.com/api/v1";
 
-export const token =
+export const PRODUCTS_ORIGINS = "/products-origins";
+export const PATHS = {
+    CART: "/cart",
+    PRODUCT: "/product/:id",
+    ORDER: "/orders/:id",
+    MY_PRODUCTS: "/my-products",
+    ORDERS_HISTORY: "/history",
+};
+export const API_TOKEN =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmdWxsTmFtZSI6IkFudG9uIFNuaWd1ciIsImlhdCI6MTU5OTA3NDgxNywiZXhwIjoxNjA0MjU4ODE3fQ.myQZafK0M37nSK5_dsr4oABqUZqOnGEITzheu2zJkus";
 
 export const GET_PRODUCTS = "GET_PRODUCTS";

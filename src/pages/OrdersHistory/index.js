@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import api from "../../services/api";
-import { token } from "../../constants/constants";
+import { API_TOKEN } from "../../constants/constants";
 
 import Header from "../../components/Header/index";
 import styles from "./styles.module.css";
@@ -16,7 +16,7 @@ const OrdersHistory = ({ openModal, summaryPrice }) => {
             url: "/orders",
             headers: {
                 "Content-Type": " application/json",
-                Authorization: token,
+                Authorization: API_TOKEN,
             },
         })
             .then((response) => {

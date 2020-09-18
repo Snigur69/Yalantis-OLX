@@ -2,12 +2,14 @@ import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import api from "./services/api";
 import { connect } from "react-redux";
+import { PRODUCTS_ORIGINS, PATHS } from "./constants/constants";
 
 import CartPage from "./pages/CartPage/index";
 import ProductPage from "./pages/ProductPage/index";
 import CatalogPage from "./pages/CatalogPage/index";
 import MyProductsPage from "./pages/MyProductsPage/index";
 import CreateProduct from "./containers/CreateProduct";
+import EditProduct from "./containers/EditProduct";
 import OrdersHistory from "./pages/OrdersHistory";
 import OrderPage from "./pages/OrderPage";
 
@@ -67,7 +69,7 @@ const App = ({
     useEffect(() => {
         api({
             method: "get",
-            url: "/products-origins",
+            url: PRODUCTS_ORIGINS,
         })
             .then((response) => {
                 getOriginsDispatch(response.data.items);
@@ -126,7 +128,7 @@ const App = ({
         <div className="store">
             <Router>
                 <Switch>
-                    <Route path="/cart">
+                    <Route path={PATHS.CART}>
                         <CartPage
                             clearCart={clearCartDispatch}
                             openModal={handleOpenModal}
@@ -140,7 +142,7 @@ const App = ({
                         />
                     </Route>
                     <Route
-                        path="/product/:id"
+                        path={PATHS.PRODUCT}
                         render={(innerProps) => (
                             <ProductPage
                                 {...innerProps}
@@ -151,7 +153,7 @@ const App = ({
                         )}
                     />
                     <Route
-                        path="/orders/:id"
+                        path={PATHS.ORDER}
                         render={(innerProps) => (
                             <OrderPage
                                 {...innerProps}
@@ -160,7 +162,7 @@ const App = ({
                             />
                         )}
                     />
-                    <Route path="/my-products">
+                    <Route path={PATHS.MY_PRODUCTS}>
                         <MyProductsPage
                             editProductModal={editProductModal}
                             openModal={handleOpenModal}
@@ -174,7 +176,7 @@ const App = ({
                         />
                     </Route>
 
-                    <Route path="/history">
+                    <Route path={PATHS.ORDERS_HISTORY}>
                         <OrdersHistory
                             openModal={handleOpenModal}
                             summaryPrice={cartTotal}
@@ -197,14 +199,22 @@ const App = ({
                         />
                     </Route>
                 </Switch>
+
+                {modal &&
+                    (currentProduct.id ? (
+                        <EditProduct
+                            currentProduct={currentProduct}
+                            closeModal={closeModalDispatch}
+                            origins={origins}
+                        />
+                    ) : (
+                        <CreateProduct
+                            currentProduct={currentProduct}
+                            closeModal={closeModalDispatch}
+                            origins={origins}
+                        />
+                    ))}
             </Router>
-            {modal && (
-                <CreateProduct
-                    currentProduct={currentProduct}
-                    closeModal={closeModalDispatch}
-                    origins={origins}
-                />
-            )}
         </div>
     );
 };

@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import { API_TOKEN, PATHS } from "../../constants/constants";
+import { API_TOKEN } from "../../constants/constants";
 import api from "../../services/api";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import Form from "../../components/Form/index";
 
-const CreateProduct = ({ closeModal, currentProduct, origins }) => {
+const EditProduct = ({ closeModal, currentProduct, origins }) => {
     const [isSubmitError, setisSubmitError] = useState(false);
     const history = useHistory();
 
-    const createNewProduct = async ({ name, price, origin }) => {
+    const editProduct = async ({ name, price, origin }) => {
         await api({
-            method: "post",
-            url: "/products",
+            method: "patch",
+            url: `/products/${currentProduct.id}`,
             headers: {
                 "Content-Type": " application/json",
                 Authorization: API_TOKEN,
@@ -28,9 +28,7 @@ const CreateProduct = ({ closeModal, currentProduct, origins }) => {
         })
             .then((response) => {
                 closeModal();
-                history.location.pathname === PATHS.MY_PRODUCTS
-                    ? history.go(0)
-                    : history.push(PATHS.MY_PRODUCTS);
+                history.go(0);
             })
             .catch((error) => {
                 setisSubmitError(true);
@@ -40,17 +38,17 @@ const CreateProduct = ({ closeModal, currentProduct, origins }) => {
     return (
         <Form
             closeModal={closeModal}
-            title="Добавить товар"
+            title="Изменить товар"
             currentProduct={currentProduct}
             origins={origins}
-            submitForm={createNewProduct}
+            submitForm={editProduct}
             isSubmitError={isSubmitError}
-            actionType="add"
+            actionType="edit"
         />
     );
 };
 
-CreateProduct.propTypes = {
+EditProduct.propTypes = {
     closeModal: PropTypes.func,
     currentProduct: PropTypes.shape({
         id: PropTypes.string,
@@ -61,4 +59,4 @@ CreateProduct.propTypes = {
     origins: PropTypes.array,
 };
 
-export default CreateProduct;
+export default EditProduct;

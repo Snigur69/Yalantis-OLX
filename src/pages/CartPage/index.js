@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import api from "../../services/api";
-import { token } from "../../constants/constants";
+import { API_TOKEN } from "../../constants/constants";
 import { useHistory } from "react-router-dom";
 
 import Header from "../../components/Header/index";
@@ -23,7 +23,7 @@ const CartPage = ({
     const history = useHistory();
 
     const createOrder = () => {
-        let order = products.map((el) => {
+        const order = products.map((el) => {
             return { productId: el.id, count: el.count };
         });
         api({
@@ -31,7 +31,7 @@ const CartPage = ({
             url: "/orders",
             headers: {
                 "Content-Type": " application/json",
-                Authorization: token,
+                Authorization: API_TOKEN,
             },
             data: JSON.stringify({
                 order: {

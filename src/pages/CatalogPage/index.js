@@ -17,24 +17,22 @@ const CatalogPage = ({
     origins,
 }) => {
     return (
-        <>
-            <Products
-                editable={""}
-                title="Каталог"
-                button="Добавить в корзину"
-                openModal={openModal}
-                origins={origins}
-                products={products}
-                getProducts={getProducts}
-                summaryPrice={summaryPrice}
-                addToCart={addToCart}
-                setOrigins={setOrigins}
-                options={options}
-                queryOptions={queryOptions}
-                setPerPage={setPerPage}
-                changePriceRange={changePriceRange}
-            />
-        </>
+        <Products
+            editable={""}
+            title="Каталог"
+            button="Добавить в корзину"
+            openModal={openModal}
+            origins={origins}
+            products={products}
+            getProducts={getProducts}
+            summaryPrice={summaryPrice}
+            addToCart={addToCart}
+            setOrigins={setOrigins}
+            options={options}
+            queryOptions={queryOptions}
+            setPerPage={setPerPage}
+            changePriceRange={changePriceRange}
+        />
     );
 };
 
