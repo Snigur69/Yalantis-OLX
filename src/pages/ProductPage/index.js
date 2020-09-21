@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import api from "../services/api";
-import Header from "../components/Header";
-import styles from "../assets/css/productPage.module.css";
-import defaultImg from "../assets/img/productImage.gif";
+import api from "../../services/api";
 import PropTypes from "prop-types";
-import loader from "../assets/img/loader.gif";
 
-const ProductPage = ({ summaryPrice, addToCart, match }) => {
+import Header from "../../components/Header/index";
+
+import defaultImg from "../../assets/img/productImage.gif";
+import loader from "../../assets/img/loader.gif";
+import styles from "./styles.module.css";
+
+const ProductPage = ({ summaryPrice, addToCart, match, openModal }) => {
     const [product, setProduct] = useState({});
 
     useEffect(() => {
@@ -20,7 +22,7 @@ const ProductPage = ({ summaryPrice, addToCart, match }) => {
     }, [match.params.id]);
     return product.id ? (
         <div>
-            <Header summaryPrice={summaryPrice} />
+            <Header openModal={openModal} summaryPrice={summaryPrice} />
             <div className={styles.product_page}>
                 <div className={styles.image_wrap}>
                     <img src={defaultImg} alt="" />
@@ -53,6 +55,8 @@ const ProductPage = ({ summaryPrice, addToCart, match }) => {
 ProductPage.propTypes = {
     summaryPrice: PropTypes.number,
     addToCart: PropTypes.func,
+    match: PropTypes.object,
+    openModal: PropTypes.func,
 };
 
 export default ProductPage;

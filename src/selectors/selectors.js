@@ -3,6 +3,19 @@ import { createSelector } from "reselect";
 export const productsSelector = (state) => state.products;
 export const cartProductsSelector = (state) => state.cart;
 export const optionsSelector = (state) => state.options;
+export const modalStateSelector = (state) => state.modal.isOpen;
+export const globalOriginsSelector = (state) => state.origins;
+export const currentProductSelector = (state) => {
+    if (state.modal.currentProduct.id) {
+        return state.modal.currentProduct;
+    }
+    return {
+        id: "",
+        name: "",
+        price: 0,
+        origin: "",
+    };
+};
 
 export const cartItemsSelector = createSelector(
     cartProductsSelector,

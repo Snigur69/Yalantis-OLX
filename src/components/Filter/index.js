@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "../assets/css/filter.module.css";
+
+import styles from "./styles.module.css";
 
 const Filter = ({
     getProductsByOrigin,

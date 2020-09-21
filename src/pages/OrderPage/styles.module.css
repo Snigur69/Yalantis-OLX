@@ -1,9 +1,11 @@
-.cart_title {
+.order {
+    text-align: center;
+}
+.title {
     font-style: normal;
     font-weight: bold;
     font-size: 32px;
     line-height: 40px;
     letter-spacing: 0.05em;
     color: #2e4077;
-    text-align: center;
 }

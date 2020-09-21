@@ -7,6 +7,10 @@ import {
     DECRESE_PRODUCT_COUNT,
     SET_PER_PAGE,
     SET_ORIGINS,
+    CLOSE_MODAL,
+    OPEN_MODAL,
+    GET_ORIGINS,
+    CLEAR_CART,
 } from "../constants/constants";
 
 export function getProducts(products) {
@@ -70,5 +74,31 @@ export function changePriceRange(minPrice, maxPrice) {
         type: "CHANGE_PRICE_RANGE",
         minPrice,
         maxPrice,
+    };
+}
+
+export function openModal(product) {
+    return {
+        type: OPEN_MODAL,
+        product,
+    };
+}
+
+export function closeModal() {
+    return {
+        type: CLOSE_MODAL,
+    };
+}
+
+export function getOrigins(origins) {
+    return {
+        type: GET_ORIGINS,
+        origins,
+    };
+}
+
+export function clearCart() {
+    return {
+        type: CLEAR_CART,
     };
 }

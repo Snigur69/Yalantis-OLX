@@ -87,6 +87,9 @@ export function cartReducer(state = initialState, action) {
             copyCartProducts.splice(duplicatedIndex, 1, duplicatedProduct[0]);
             return copyCartProducts;
         }
+        case "CLEAR_CART": {
+            return [];
+        }
 
         default:
             return state;

@@ -9,6 +9,7 @@
     background: rgba(39, 68, 134);
     height: 72px;
 }
+
 .nav_wrap {
     padding-left: 15px;
 }
@@ -24,4 +25,15 @@
 }
 .cart_wrap {
     padding-right: 15px;
+}
+.open_modal {
+    border: none;
+    background: none;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 21px;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    cursor: pointer;
 }

@@ -1,0 +1,28 @@
+.cart_title {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 40px;
+    letter-spacing: 0.05em;
+    color: #2e4077;
+    text-align: center;
+}
+.create_order {
+    background: #2e4077;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    padding: 10px 40px;
+    transition: 0.3s;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+}
+.create_order:hover {
+    background: #fff;
+    color: #2e4077;
+    border: 2px solid #2e4077;
+}

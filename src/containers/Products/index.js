@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import api from "../services/api";
-import styles from "../assets/css/catalogPage.module.css";
-import Product from "../components/Product";
-import Header from "../components/Header";
+import api from "../../services/api";
 import PropTypes from "prop-types";
-import loader from "../assets/img/loader.gif";
-import Filter from "../components/Filter";
-import Pagination from "../components/Pagination";
 
-const CatalogPage = ({
+import Product from "../../components/Product/index";
+import Header from "../../components/Header/index";
+import Filter from "../../components/Filter/index";
+import Pagination from "../../components/Pagination/index";
+
+import loader from "../../assets/img/loader.gif";
+import styles from "./styles.module.css";
+
+const Products = ({
     summaryPrice,
     addToCart,
     products,
@@ -18,8 +20,14 @@ const CatalogPage = ({
     queryOptions,
     setPerPage,
     changePriceRange,
+    openModal,
+    origins,
+    button,
+    token,
+    title,
+    editable,
 }) => {
-    const [origins, setNewOrigins] = useState([]);
+    const [newOrigins, setNewOrigins] = useState([]);
     const [minValue, setminValue] = useState(0);
     const [maxValue, setmaxValue] = useState(0);
     const [pagesCount, setPagesCount] = useState(0);
@@ -51,7 +59,17 @@ const CatalogPage = ({
     };
 
     useEffect(() => {
-        api.get(`/products?${queryOptions}&page=${currentPage}`)
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        if (token) {
+            headers["Authorization"] = token;
+        }
+        api({
+            method: "get",
+            url: `/products?${queryOptions}&page=${currentPage}&${editable}`,
+            headers: headers,
+        })
             .then((response) => {
                 getProducts(response.data.items);
                 setPagesCount(
@@ -62,31 +80,34 @@ const CatalogPage = ({
                 throw new Error("Error with API");
             });
 
-        api.get(`/products-origins`)
-            .then((response) => {
-                let originId = 0;
-                const newOrigins = response.data.items.map((el) => {
-                    if (options.origins.includes(el.value)) {
-                        return {
-                            ...el,
-                            id: originId++,
-                            isChecked: true,
-                        };
-                    }
-                    return {
-                        ...el,
-                        id: originId++,
-                        isChecked: false,
-                    };
-                });
-                setNewOrigins(newOrigins);
-            })
-            .catch((error) => {
-                throw new Error("Error with API");
-            });
+        let originId = 0;
+        const newOrigins = origins.map((el) => {
+            if (options.origins.includes(el.value)) {
+                return {
+                    ...el,
+                    id: originId++,
+                    isChecked: true,
+                };
+            }
+            return {
+                ...el,
+                id: originId++,
+                isChecked: false,
+            };
+        });
+        setNewOrigins(newOrigins);
+
         setminValue(options.minPrice);
         setmaxValue(options.maxPrice);
-    }, [options, currentPage, getProducts, queryOptions]);
+    }, [
+        options,
+        currentPage,
+        getProducts,
+        queryOptions,
+        origins,
+        token,
+        editable,
+    ]);
 
     let pages = [];
     for (let i = 1; i <= pagesCount; i++) {
@@ -94,8 +115,8 @@ const CatalogPage = ({
     }
     return (
         <div className={styles.catalog}>
-            <Header summaryPrice={summaryPrice} />
-            <h1 className={styles.catalog_title}>Каталог</h1>
+            <Header openModal={openModal} summaryPrice={summaryPrice} />
+            <h1 className={styles.catalog_title}>{title}</h1>
             <div className={styles.catalog_wrap}>
                 <Filter
                     getProductsByOrigin={getProductsByOrigin}
@@ -105,7 +126,7 @@ const CatalogPage = ({
                     perPageChange={perPageChange}
                     minValue={minValue}
                     maxValue={maxValue}
-                    origins={origins}
+                    origins={newOrigins}
                     options={options}
                 />
                 {products.length ? (
@@ -116,6 +137,7 @@ const CatalogPage = ({
                                     addToCart={addToCart}
                                     key={el.id}
                                     product={el}
+                                    button={button}
                                 />
                             );
                         })}
@@ -138,7 +160,7 @@ const CatalogPage = ({
     );
 };
 
-CatalogPage.propTypes = {
+Products.propTypes = {
     summaryPrice: PropTypes.number,
     addToCart: PropTypes.func,
     products: PropTypes.array,
@@ -153,6 +175,12 @@ CatalogPage.propTypes = {
     queryOptions: PropTypes.string,
     setPerPage: PropTypes.func,
     changePriceRange: PropTypes.func,
+    openModal: PropTypes.func,
+    origins: PropTypes.array,
+    button: PropTypes.string,
+    token: PropTypes.string,
+    title: PropTypes.string,
+    editable: PropTypes.string,
 };
 
-export default CatalogPage;
+export default Products;
