@@ -15,6 +15,10 @@ const CatalogPage = ({
     changePriceRange,
     openModal,
     origins,
+    setCurrentPage,
+    setTotalCount,
+    productsCount,
+    productsRequest,
 }) => {
     return (
         <Products
@@ -32,6 +36,10 @@ const CatalogPage = ({
             queryOptions={queryOptions}
             setPerPage={setPerPage}
             changePriceRange={changePriceRange}
+            setCurrentPage={setCurrentPage}
+            setTotalCount={setTotalCount}
+            productsCount={productsCount}
+            productsRequest={productsRequest}
         />
     );
 };

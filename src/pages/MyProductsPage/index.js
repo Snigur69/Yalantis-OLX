@@ -5,8 +5,10 @@ import { API_TOKEN } from "../../constants/constants";
 import Products from "../../containers/Products/index";
 
 const MyProductsPage = ({
+    products,
     summaryPrice,
     setOrigins,
+    getProducts,
     options,
     queryOptions,
     setPerPage,
@@ -14,8 +16,12 @@ const MyProductsPage = ({
     openModal,
     origins,
     editProductModal,
+    setCurrentPage,
+    setTotalCount,
+    productsCount,
+    productsRequest,
 }) => {
-    const [products, setProducts] = useState([]);
+    // const [products, setProducts] = useState([]);
 
     return (
         <Products
@@ -26,7 +32,7 @@ const MyProductsPage = ({
             openModal={openModal}
             origins={origins}
             products={products}
-            getProducts={setProducts}
+            getProducts={getProducts}
             summaryPrice={summaryPrice}
             addToCart={editProductModal}
             setOrigins={setOrigins}
@@ -34,6 +40,10 @@ const MyProductsPage = ({
             queryOptions={queryOptions}
             setPerPage={setPerPage}
             changePriceRange={changePriceRange}
+            setCurrentPage={setCurrentPage}
+            setTotalCount={setTotalCount}
+            productsCount={productsCount}
+            productsRequest={productsRequest}
         />
     );
 };

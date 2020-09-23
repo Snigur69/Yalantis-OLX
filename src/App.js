@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import api from "./services/api";
+import api, { getOriginsFromApi } from "./services/api";
 import { connect } from "react-redux";
 import { PRODUCTS_ORIGINS, PATHS } from "./constants/constants";
 
@@ -29,6 +29,17 @@ import {
     closeModal,
     getOrigins,
     clearCart,
+    setCurrentPage,
+    originsRequest,
+    setTotalCount,
+    productsRequest,
+    currentProductRequest,
+    ordersRequest,
+    currentOrderRequest,
+    createOrder,
+    addNewProduct,
+    editProduct,
+    // setSubmitError,
 } from "./store/actions";
 import {
     cartItemsSelector,
@@ -40,6 +51,11 @@ import {
     modalStateSelector,
     currentProductSelector,
     globalOriginsSelector,
+    productsCountSelector,
+    globalCurrentProductSelector,
+    ordersSelector,
+    currentOrderSelector,
+    submitErrorSelector,
 } from "./selectors/selectors";
 
 const App = ({
@@ -65,19 +81,26 @@ const App = ({
     getOriginsDispatch,
     origins,
     clearCartDispatch,
+    setCurrentPage,
+    originsRequest,
+    setTotalCount,
+    productsCount,
+    productsRequest,
+    currentProductRequest,
+    globalCurrentProduct,
+    orders,
+    ordersRequest,
+    currentOrder,
+    currentOrderRequest,
+    createOrder,
+    addNewProduct,
+    setSubmitError,
+    isSubmitError,
+    editProduct,
 }) => {
     useEffect(() => {
-        api({
-            method: "get",
-            url: PRODUCTS_ORIGINS,
-        })
-            .then((response) => {
-                getOriginsDispatch(response.data.items);
-            })
-            .catch((error) => {
-                throw new Error("Error with API");
-            });
-    }, [getOriginsDispatch]);
+        originsRequest();
+    }, []);
 
     const addToCart = (e) => {
         const newProduct = {
@@ -139,6 +162,7 @@ const App = ({
                             changeProductCount={handleChangeProductCount}
                             increseProductCount={handleIncreseProductCount}
                             decreseProductCount={handleDecreseProductCount}
+                            createNewOrder={createOrder}
                         />
                     </Route>
                     <Route
@@ -149,6 +173,8 @@ const App = ({
                                 addToCart={addToCart}
                                 openModal={handleOpenModal}
                                 summaryPrice={cartTotal}
+                                currentProductRequest={currentProductRequest}
+                                product={globalCurrentProduct}
                             />
                         )}
                     />
@@ -159,12 +185,16 @@ const App = ({
                                 {...innerProps}
                                 openModal={handleOpenModal}
                                 summaryPrice={cartTotal}
+                                order={currentOrder}
+                                currentOrderRequest={currentOrderRequest}
                             />
                         )}
                     />
                     <Route path={PATHS.MY_PRODUCTS}>
                         <MyProductsPage
                             editProductModal={editProductModal}
+                            products={products}
+                            getProducts={getProductsDispatch}
                             openModal={handleOpenModal}
                             summaryPrice={cartTotal}
                             setOrigins={setOriginsDispatch}
@@ -173,6 +203,10 @@ const App = ({
                             setPerPage={setPerPageDispatch}
                             changePriceRange={changePriceRangeDispatch}
                             origins={origins}
+                            setCurrentPage={setCurrentPage}
+                            productsCount={productsCount}
+                            setTotalCount={setTotalCount}
+                            productsRequest={productsRequest}
                         />
                     </Route>
 
@@ -180,6 +214,8 @@ const App = ({
                         <OrdersHistory
                             openModal={handleOpenModal}
                             summaryPrice={cartTotal}
+                            orders={orders}
+                            ordersRequest={ordersRequest}
                         />
                     </Route>
 
@@ -196,6 +232,10 @@ const App = ({
                             queryOptions={queryOptions}
                             setPerPage={setPerPageDispatch}
                             changePriceRange={changePriceRangeDispatch}
+                            setCurrentPage={setCurrentPage}
+                            productsCount={productsCount}
+                            setTotalCount={setTotalCount}
+                            productsRequest={productsRequest}
                         />
                     </Route>
                 </Switch>
@@ -206,12 +246,17 @@ const App = ({
                             currentProduct={currentProduct}
                             closeModal={closeModalDispatch}
                             origins={origins}
+                            editGlobalProduct={editProduct}
+                            isSubmitError={isSubmitError}
                         />
                     ) : (
                         <CreateProduct
                             currentProduct={currentProduct}
                             closeModal={closeModalDispatch}
                             origins={origins}
+                            addNewProduct={addNewProduct}
+                            // setSubmitError={setSubmitError}
+                            isSubmitError={isSubmitError}
                         />
                     ))}
             </Router>
@@ -230,6 +275,11 @@ function mapStateToProps(state) {
         modal: modalStateSelector(state),
         currentProduct: currentProductSelector(state),
         origins: globalOriginsSelector(state),
+        productsCount: productsCountSelector(state),
+        globalCurrentProduct: globalCurrentProductSelector(state),
+        orders: ordersSelector(state),
+        currentOrder: currentOrderSelector(state),
+        isSubmitError: submitErrorSelector(state),
     };
 }
 
@@ -247,6 +297,17 @@ const mapDispatchToProps = {
     closeModalDispatch: closeModal,
     getOriginsDispatch: getOrigins,
     clearCartDispatch: clearCart,
+    setCurrentPage: setCurrentPage,
+    originsRequest: originsRequest,
+    setTotalCount: setTotalCount,
+    productsRequest: productsRequest,
+    currentProductRequest: currentProductRequest,
+    ordersRequest: ordersRequest,
+    currentOrderRequest: currentOrderRequest,
+    createOrder: createOrder,
+    addNewProduct: addNewProduct,
+    editProduct: editProduct,
+    // setSubmitError: setSubmitError,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

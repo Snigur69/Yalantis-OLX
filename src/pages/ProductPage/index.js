@@ -8,17 +8,26 @@ import defaultImg from "../../assets/img/productImage.gif";
 import loader from "../../assets/img/loader.gif";
 import styles from "./styles.module.css";
 
-const ProductPage = ({ summaryPrice, addToCart, match, openModal }) => {
-    const [product, setProduct] = useState({});
+const ProductPage = ({
+    summaryPrice,
+    addToCart,
+    match,
+    openModal,
+    currentProductRequest,
+    product,
+}) => {
+    // const [product, setProduct] = useState({});
 
     useEffect(() => {
-        api.get(`/products/${match.params.id}`)
-            .then((response) => {
-                setProduct(response.data);
-            })
-            .catch((error) => {
-                throw new Error("Error with API");
-            });
+        const url = `/products/${match.params.id}`;
+        currentProductRequest(url);
+        // api.get(`/products/${match.params.id}`)
+        //     .then((response) => {
+        //         setProduct(response.data);
+        //     })
+        //     .catch((error) => {
+        //         throw new Error("Error with API");
+        //     });
     }, [match.params.id]);
     return product.id ? (
         <div>

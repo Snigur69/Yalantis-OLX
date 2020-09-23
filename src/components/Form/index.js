@@ -138,6 +138,7 @@ const Form = ({
                                     Название должно быть уникальным!
                                 </p>
                             )}
+                            {console.log(isSubmitting)}
                             {actionType === "edit" ? (
                                 <div className={styles.buttons_wrap}>
                                     <button

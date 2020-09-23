@@ -19,6 +19,7 @@ const CartPage = ({
     increseProductCount,
     decreseProductCount,
     clearCart,
+    createNewOrder,
 }) => {
     const history = useHistory();
 
@@ -26,26 +27,27 @@ const CartPage = ({
         const order = products.map((el) => {
             return { productId: el.id, count: el.count };
         });
-        api({
-            method: "post",
-            url: "/orders",
-            headers: {
-                "Content-Type": " application/json",
-                Authorization: API_TOKEN,
-            },
-            data: JSON.stringify({
-                order: {
-                    pieces: order,
-                },
-            }),
-        })
-            .then((response) => {
-                history.push(`/orders/${response.data.id}`);
-                clearCart();
-            })
-            .catch((error) => {
-                throw new Error(error);
-            });
+        createNewOrder(order);
+        // api({
+        //     method: "post",
+        //     url: "/orders",
+        //     headers: {
+        //         "Content-Type": " application/json",
+        //         Authorization: API_TOKEN,
+        //     },
+        //     data: JSON.stringify({
+        //         order: {
+        //             pieces: order,
+        //         },
+        //     }),
+        // })
+        //     .then((response) => {
+        //         history.push(`/orders/${response.data.id}`);
+        //         clearCart();
+        //     })
+        //     .catch((error) => {
+        //         throw new Error(error);
+        //     });
     };
 
     return (

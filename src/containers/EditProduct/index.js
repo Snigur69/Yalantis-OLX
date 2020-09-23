@@ -6,33 +6,46 @@ import PropTypes from "prop-types";
 
 import Form from "../../components/Form/index";
 
-const EditProduct = ({ closeModal, currentProduct, origins }) => {
-    const [isSubmitError, setisSubmitError] = useState(false);
+const EditProduct = ({
+    closeModal,
+    currentProduct,
+    origins,
+    editGlobalProduct,
+    isSubmitError,
+}) => {
+    // const [isSubmitError, setisSubmitError] = useState(false);
     const history = useHistory();
 
-    const editProduct = async ({ name, price, origin }) => {
-        await api({
+    const editProduct = ({ name, price, origin }) => {
+        const product = {
             method: "patch",
             url: `/products/${currentProduct.id}`,
-            headers: {
-                "Content-Type": " application/json",
-                Authorization: API_TOKEN,
-            },
-            data: JSON.stringify({
-                product: {
-                    name,
-                    price: Number(price),
-                    origin: origin.value,
-                },
-            }),
-        })
-            .then((response) => {
-                closeModal();
-                history.go(0);
-            })
-            .catch((error) => {
-                setisSubmitError(true);
-            });
+            data: { name, price, origin },
+        };
+        editGlobalProduct(product);
+
+        //  api({
+        //     method: "patch",
+        //     url: `/products/${currentProduct.id}`,
+        //     headers: {
+        //         "Content-Type": " application/json",
+        //         Authorization: API_TOKEN,
+        //     },
+        //     data: JSON.stringify({
+        //         product: {
+        //             name,
+        //             price: Number(price),
+        //             origin: origin.value,
+        //         },
+        //     }),
+        // })
+        //     .then((response) => {
+        //         closeModal();
+        //         history.go(0);
+        //     })
+        //     .catch((error) => {
+        //         setisSubmitError(true);
+        //     });
     };
 
     return (

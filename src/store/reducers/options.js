@@ -2,7 +2,8 @@ export let initialState = {
     perPage: 50,
     origins: [],
     minPrice: 0,
-    maxPrice: 10000,
+    maxPrice: 0,
+    currentPage: 1,
 };
 
 export function optionsReducer(state = initialState, action) {
@@ -40,6 +41,12 @@ export function optionsReducer(state = initialState, action) {
                 ...state,
                 minPrice: Number(action.minPrice),
                 maxPrice: Number(action.maxPrice),
+            };
+        }
+        case "SET_CURRENT_PAGE": {
+            return {
+                ...state,
+                currentPage: action.currentPage,
             };
         }
         default:

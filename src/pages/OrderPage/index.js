@@ -8,24 +8,32 @@ import Order from "../../components/Order";
 
 import styles from "./styles.module.css";
 
-const OrderPage = ({ openModal, summaryPrice, match }) => {
-    const [order, setOrder] = useState({});
+const OrderPage = ({
+    openModal,
+    summaryPrice,
+    match,
+    order,
+    currentOrderRequest,
+}) => {
+    // const [order, setOrder] = useState({});
 
     useEffect(() => {
-        api({
-            method: "get",
-            url: `/orders/${match.params.id}`,
-            headers: {
-                "Content-Type": " application/json",
-                Authorization: API_TOKEN,
-            },
-        })
-            .then((response) => {
-                setOrder(response.data);
-            })
-            .catch((error) => {
-                throw new Error(error);
-            });
+        const url = `/orders/${match.params.id}`;
+        currentOrderRequest(url);
+        // api({
+        //     method: "get",
+        //     url: `/orders/${match.params.id}`,
+        //     headers: {
+        //         "Content-Type": " application/json",
+        //         Authorization: API_TOKEN,
+        //     },
+        // })
+        //     .then((response) => {
+        //         setOrder(response.data);
+        //     })
+        //     .catch((error) => {
+        //         throw new Error(error);
+        //     });
     }, [match.params.id]);
     return (
         <div className={styles.order}>
