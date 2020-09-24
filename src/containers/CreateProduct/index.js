@@ -16,13 +16,13 @@ const CreateProduct = ({
     // const [isSubmitError, setisSubmitError] = useState(false);
     const history = useHistory();
 
-    const createNewProduct = ({ name, price, origin }) => {
+    const createNewProduct = ({ name, price, origin }, { setSubmitting }) => {
         const product = {
             method: "post",
             url: "/products",
             data: { name, price, origin },
         };
-        addNewProduct(product);
+        addNewProduct(product, setSubmitting);
         // await api({
         //     method: "post",
         //     url: "/products",

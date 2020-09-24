@@ -195,16 +195,18 @@ export function createOrder(order) {
     };
 }
 
-export function addNewProduct(product) {
+export function addNewProduct(product, fn) {
     return {
         type: ADD_NEW_PRODUCT,
         product,
+        setSubmitting: fn,
     };
 }
 
-export function editProduct(product) {
+export function editProduct(product, fn) {
     return {
         type: EDIT_PRODUCT,
         product,
+        setSubmitting: fn,
     };
 }

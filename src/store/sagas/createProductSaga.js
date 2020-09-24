@@ -10,8 +10,11 @@ export default function* createProductSaga() {
 function* onCreateProduct(action) {
     try {
         yield call(manageProduct, action.product);
+        action.setSubmitting(false);
         yield put(closeModal());
+        window.location.reload();
     } catch (error) {
+        action.setSubmitting(false);
         yield put(setSubmitError(true));
     }
 }

@@ -16,13 +16,14 @@ const EditProduct = ({
     // const [isSubmitError, setisSubmitError] = useState(false);
     const history = useHistory();
 
-    const editProduct = ({ name, price, origin }) => {
+    const editProduct = ({ name, price, origin }, { setSubmitting }) => {
         const product = {
             method: "patch",
             url: `/products/${currentProduct.id}`,
             data: { name, price, origin },
         };
-        editGlobalProduct(product);
+        editGlobalProduct(product, setSubmitting);
+        // setSubmitting(false);
 
         //  api({
         //     method: "patch",

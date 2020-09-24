@@ -44,7 +44,9 @@ const Form = ({
                             value: string().required("Поле обязательное!"),
                         }),
                     })}
-                    onSubmit={(values) => submitForm(values)}
+                    onSubmit={(values, { setSubmitting }) =>
+                        submitForm(values, { setSubmitting })
+                    }
                 >
                     {({
                         values,
@@ -138,7 +140,6 @@ const Form = ({
                                     Название должно быть уникальным!
                                 </p>
                             )}
-                            {console.log(isSubmitting)}
                             {actionType === "edit" ? (
                                 <div className={styles.buttons_wrap}>
                                     <button
