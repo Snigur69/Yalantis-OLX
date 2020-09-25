@@ -28,6 +28,7 @@ export const SET_ORIGINS = "SET_ORIGINS";
 export const ORIGINS_REQUEST = "ORIGINS_REQUEST";
 export const GET_ORIGINS = "GET_ORIGINS";
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
+export const CHANGE_PRICE_RANGE = "CHANGE_PRICE_RANGE";
 
 export const OPEN_MODAL = "OPEN_MODAL";
 export const CLOSE_MODAL = "CLOSE_MODAL";

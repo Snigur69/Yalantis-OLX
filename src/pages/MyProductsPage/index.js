@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { API_TOKEN } from "../../constants/constants";
 
@@ -21,8 +21,6 @@ const MyProductsPage = ({
     productsCount,
     productsRequest,
 }) => {
-    // const [products, setProducts] = useState([]);
-
     return (
         <Products
             editable={"editable=true"}
@@ -63,6 +61,10 @@ MyProductsPage.propTypes = {
     openModal: PropTypes.func,
     origins: PropTypes.array,
     editProductModal: PropTypes.func,
+    setCurrentPage: PropTypes.func,
+    setTotalCount: PropTypes.func,
+    productsCount: PropTypes.number,
+    productsRequest: PropTypes.func,
 };
 
 export default MyProductsPage;

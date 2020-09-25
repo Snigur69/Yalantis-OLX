@@ -1,4 +1,4 @@
-import { takeEvery, put, call, debounce } from "redux-saga/effects";
+import { put, call, debounce } from "redux-saga/effects";
 import { PRODUCTS_REQUEST } from "../../constants/constants";
 import { getProducts, setTotalCount } from "../actions";
 import { getProductsFromApi } from "../../services/api";

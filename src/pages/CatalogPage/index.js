@@ -61,5 +61,9 @@ CatalogPage.propTypes = {
     changePriceRange: PropTypes.func,
     openModal: PropTypes.func,
     origins: PropTypes.array,
+    setCurrentPage: PropTypes.func,
+    setTotalCount: PropTypes.func,
+    productsCount: PropTypes.number,
+    productsRequest: PropTypes.func,
 };
 export default CatalogPage;

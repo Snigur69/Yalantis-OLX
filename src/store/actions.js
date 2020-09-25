@@ -25,6 +25,7 @@ import {
     ADD_NEW_PRODUCT,
     EDIT_PRODUCT,
     SET_SUBMIT_ERROR,
+    CHANGE_PRICE_RANGE,
 } from "../constants/constants";
 
 export function productsRequest(params) {
@@ -99,7 +100,7 @@ export function setOrigins(origin, isChecked) {
 
 export function changePriceRange(minPrice, maxPrice) {
     return {
-        type: "CHANGE_PRICE_RANGE",
+        type: CHANGE_PRICE_RANGE,
         minPrice,
         maxPrice,
     };

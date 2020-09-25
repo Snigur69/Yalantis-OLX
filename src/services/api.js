@@ -5,10 +5,6 @@ import {
     API_TOKEN,
 } from "../constants/constants";
 
-export default axios.create({
-    baseURL: PRODUCTS_API,
-});
-
 export const getOriginsFromApi = () =>
     axios({
         method: "get",
@@ -127,15 +123,8 @@ export const manageProduct = async ({ method, url, data }) => {
             },
         }),
     })
-        .then((response) => {
-            // return false;
-            // closeModal();
-            // history.location.pathname === PATHS.MY_PRODUCTS
-            //     ? history.go(0)
-            //     : history.push(PATHS.MY_PRODUCTS);
-        })
+        .then((response) => {})
         .catch((error) => {
-            // return true;
             throw new Error(error);
         });
 };

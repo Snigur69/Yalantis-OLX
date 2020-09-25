@@ -55,14 +55,14 @@ export const perPageSelector = createSelector(optionsSelector, (items) => {
 });
 
 export const minPriceSelector = createSelector(optionsSelector, (items) => {
-    if (items.minPrice) {
+    if (!isNaN(items.minPrice)) {
         return `minPrice=${items.minPrice}`;
     }
     return "";
 });
 
 export const maxPriceSelector = createSelector(optionsSelector, (items) => {
-    if (items.minPrice) {
+    if (items.maxPrice) {
         return `maxPrice=${items.maxPrice}`;
     }
     return "";

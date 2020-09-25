@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import api from "../../services/api";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import { convertUrlToParams } from "../../helpers/helpers";
@@ -29,7 +28,6 @@ const Products = ({
     title,
     editable,
     setCurrentPage,
-    setTotalCount,
     productsCount,
     productsRequest,
 }) => {
@@ -37,8 +35,6 @@ const Products = ({
     const [minValue, setminValue] = useState(0);
     const [maxValue, setmaxValue] = useState(10000);
     const [pagesCount, setPagesCount] = useState(0);
-    // const [currentPage, setCurrentPage] = useState(1);
-    // const [requestOptions, setrequestOptions] = useState([]);
     const history = useHistory();
 
     const getPage = (event) => {
@@ -77,12 +73,11 @@ const Products = ({
         requestOptions = convertUrlToParams(
             history.location.search.replace("?", "")
         );
-
         requestOptions.perPage
             ? setPerPage(requestOptions.perPage)
             : setPerPage(50);
         if (requestOptions.origins) {
-            let originsArray = requestOptions.origins.split(",");
+            const originsArray = requestOptions.origins.split(",");
             for (let i = 0; i < originsArray.length; i++) {
                 setOrigins(originsArray[i], true);
             }
@@ -101,7 +96,7 @@ const Products = ({
     }, []);
 
     useEffect(() => {
-        let url = editable
+        const url = editable
             ? `/products?${queryOptions}&editable=true`
             : `/products?${queryOptions}`;
         history.push({
@@ -116,18 +111,6 @@ const Products = ({
             headers["Authorization"] = token;
         }
         productsRequest({ url, headers });
-        // api({
-        //     method: "get",
-        //     url: url,
-        //     headers: headers,
-        // })
-        //     .then((response) => {
-        //         getProducts(response.data.items);
-        //         setTotalCount(response.data.totalItems);
-        //     })
-        //     .catch((error) => {
-        //         throw new Error("Error with API");
-        //     });
         setPagesCount(Math.ceil(productsCount / options.perPage));
 
         let originId = 0;
@@ -161,6 +144,7 @@ const Products = ({
         editable,
         history,
         productsCount,
+        productsRequest,
     ]);
 
     let pages = [];
@@ -236,6 +220,9 @@ Products.propTypes = {
     token: PropTypes.string,
     title: PropTypes.string,
     editable: PropTypes.string,
+    setCurrentPage: PropTypes.func,
+    productsCount: PropTypes.number,
+    productsRequest: PropTypes.func,
 };
 
 export default Products;

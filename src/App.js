@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import api, { getOriginsFromApi } from "./services/api";
 import { connect } from "react-redux";
-import { PRODUCTS_ORIGINS, PATHS } from "./constants/constants";
+import { PATHS } from "./constants/constants";
 
 import CartPage from "./pages/CartPage/index";
 import ProductPage from "./pages/ProductPage/index";
@@ -27,7 +26,6 @@ import {
     changePriceRange,
     openModal,
     closeModal,
-    getOrigins,
     clearCart,
     setCurrentPage,
     originsRequest,
@@ -39,7 +37,6 @@ import {
     createOrder,
     addNewProduct,
     editProduct,
-    // setSubmitError,
 } from "./store/actions";
 import {
     cartItemsSelector,
@@ -78,7 +75,6 @@ const App = ({
     closeModalDispatch,
     modal,
     currentProduct,
-    getOriginsDispatch,
     origins,
     clearCartDispatch,
     setCurrentPage,
@@ -94,7 +90,6 @@ const App = ({
     currentOrderRequest,
     createOrder,
     addNewProduct,
-    setSubmitError,
     isSubmitError,
     editProduct,
 }) => {
@@ -255,7 +250,6 @@ const App = ({
                             closeModal={closeModalDispatch}
                             origins={origins}
                             addNewProduct={addNewProduct}
-                            // setSubmitError={setSubmitError}
                             isSubmitError={isSubmitError}
                         />
                     ))}
@@ -295,7 +289,6 @@ const mapDispatchToProps = {
     changePriceRangeDispatch: changePriceRange,
     openModalDispatch: openModal,
     closeModalDispatch: closeModal,
-    getOriginsDispatch: getOrigins,
     clearCartDispatch: clearCart,
     setCurrentPage: setCurrentPage,
     originsRequest: originsRequest,
@@ -307,7 +300,6 @@ const mapDispatchToProps = {
     createOrder: createOrder,
     addNewProduct: addNewProduct,
     editProduct: editProduct,
-    // setSubmitError: setSubmitError,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

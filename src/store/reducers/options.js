@@ -1,7 +1,7 @@
 export let initialState = {
     perPage: 50,
     origins: [],
-    minPrice: 0,
+    minPrice: null,
     maxPrice: 0,
     currentPage: 1,
 };

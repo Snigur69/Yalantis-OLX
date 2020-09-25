@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import api from "../../services/api";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Header from "../../components/Header/index";
@@ -16,19 +15,10 @@ const ProductPage = ({
     currentProductRequest,
     product,
 }) => {
-    // const [product, setProduct] = useState({});
-
     useEffect(() => {
         const url = `/products/${match.params.id}`;
         currentProductRequest(url);
-        // api.get(`/products/${match.params.id}`)
-        //     .then((response) => {
-        //         setProduct(response.data);
-        //     })
-        //     .catch((error) => {
-        //         throw new Error("Error with API");
-        //     });
-    }, [match.params.id]);
+    }, [match.params.id, currentProductRequest]);
     return product.id ? (
         <div>
             <Header openModal={openModal} summaryPrice={summaryPrice} />
@@ -66,6 +56,13 @@ ProductPage.propTypes = {
     addToCart: PropTypes.func,
     match: PropTypes.object,
     openModal: PropTypes.func,
+    currentProductRequest: PropTypes.func,
+    product: PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+        price: PropTypes.number,
+        origin: PropTypes.string,
+    }),
 };
 
 export default ProductPage;
