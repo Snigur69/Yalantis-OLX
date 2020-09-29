@@ -81,17 +81,18 @@ export const queryOptionsSelector = createSelector(
     maxPriceSelector,
     currentPageSelector,
     (perPage, origins, minPrice, maxPrice, currentPage) => {
-        let options = [perPage, origins, minPrice, maxPrice, currentPage];
+        const options = [perPage, origins, minPrice, maxPrice, currentPage];
         let resultQuery = "";
-        for (let i = 0; i < options.length; i++) {
-            if (options[i]) {
+        options.map((el) => {
+            if (el) {
                 if (resultQuery) {
-                    resultQuery += `&${options[i]}`;
+                    resultQuery += `&${el}`;
                 } else {
-                    resultQuery += `${options[i]}`;
+                    resultQuery += `${el}`;
                 }
             }
-        }
+            return false;
+        });
         return resultQuery;
     }
 );
