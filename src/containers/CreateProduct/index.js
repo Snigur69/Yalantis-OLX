@@ -1,40 +1,22 @@
-import React, { useState } from "react";
-import { API_TOKEN, PATHS } from "../../constants/constants";
-import api from "../../services/api";
-import { useHistory } from "react-router-dom";
+import React from "react";
 import PropTypes from "prop-types";
 
 import Form from "../../components/Form/index";
 
-const CreateProduct = ({ closeModal, currentProduct, origins }) => {
-    const [isSubmitError, setisSubmitError] = useState(false);
-    const history = useHistory();
-
-    const createNewProduct = async ({ name, price, origin }) => {
-        await api({
+const CreateProduct = ({
+    closeModal,
+    currentProduct,
+    origins,
+    addNewProduct,
+    isSubmitError,
+}) => {
+    const createNewProduct = ({ name, price, origin }, { setSubmitting }) => {
+        const product = {
             method: "post",
             url: "/products",
-            headers: {
-                "Content-Type": " application/json",
-                Authorization: API_TOKEN,
-            },
-            data: JSON.stringify({
-                product: {
-                    name,
-                    price: Number(price),
-                    origin: origin.value,
-                },
-            }),
-        })
-            .then((response) => {
-                closeModal();
-                history.location.pathname === PATHS.MY_PRODUCTS
-                    ? history.go(0)
-                    : history.push(PATHS.MY_PRODUCTS);
-            })
-            .catch((error) => {
-                setisSubmitError(true);
-            });
+            data: { name, price, origin },
+        };
+        addNewProduct(product, setSubmitting);
     };
 
     return (
@@ -59,6 +41,8 @@ CreateProduct.propTypes = {
         origin: PropTypes.string,
     }),
     origins: PropTypes.array,
+    addNewProduct: PropTypes.func,
+    isSubmitError: PropTypes.bool,
 };
 
 export default CreateProduct;

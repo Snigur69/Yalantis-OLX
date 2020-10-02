@@ -15,6 +15,10 @@ const CatalogPage = ({
     changePriceRange,
     openModal,
     origins,
+    setCurrentPage,
+    setTotalCount,
+    productsCount,
+    productsRequest,
 }) => {
     return (
         <Products
@@ -32,6 +36,10 @@ const CatalogPage = ({
             queryOptions={queryOptions}
             setPerPage={setPerPage}
             changePriceRange={changePriceRange}
+            setCurrentPage={setCurrentPage}
+            setTotalCount={setTotalCount}
+            productsCount={productsCount}
+            productsRequest={productsRequest}
         />
     );
 };
@@ -53,5 +61,9 @@ CatalogPage.propTypes = {
     changePriceRange: PropTypes.func,
     openModal: PropTypes.func,
     origins: PropTypes.array,
+    setCurrentPage: PropTypes.func,
+    setTotalCount: PropTypes.func,
+    productsCount: PropTypes.number,
+    productsRequest: PropTypes.func,
 };
 export default CatalogPage;

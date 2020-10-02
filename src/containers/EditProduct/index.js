@@ -1,38 +1,22 @@
-import React, { useState } from "react";
-import { API_TOKEN } from "../../constants/constants";
-import api from "../../services/api";
-import { useHistory } from "react-router-dom";
+import React from "react";
 import PropTypes from "prop-types";
 
 import Form from "../../components/Form/index";
 
-const EditProduct = ({ closeModal, currentProduct, origins }) => {
-    const [isSubmitError, setisSubmitError] = useState(false);
-    const history = useHistory();
-
-    const editProduct = async ({ name, price, origin }) => {
-        await api({
+const EditProduct = ({
+    closeModal,
+    currentProduct,
+    origins,
+    editGlobalProduct,
+    isSubmitError,
+}) => {
+    const editProduct = ({ name, price, origin }, { setSubmitting }) => {
+        const product = {
             method: "patch",
             url: `/products/${currentProduct.id}`,
-            headers: {
-                "Content-Type": " application/json",
-                Authorization: API_TOKEN,
-            },
-            data: JSON.stringify({
-                product: {
-                    name,
-                    price: Number(price),
-                    origin: origin.value,
-                },
-            }),
-        })
-            .then((response) => {
-                closeModal();
-                history.go(0);
-            })
-            .catch((error) => {
-                setisSubmitError(true);
-            });
+            data: { name, price, origin },
+        };
+        editGlobalProduct(product, setSubmitting);
     };
 
     return (
@@ -57,6 +41,8 @@ EditProduct.propTypes = {
         origin: PropTypes.string,
     }),
     origins: PropTypes.array,
+    editGlobalProduct: PropTypes.func,
+    isSubmitError: PropTypes.bool,
 };
 
 export default EditProduct;

@@ -1,8 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import api from "../../services/api";
-import { API_TOKEN } from "../../constants/constants";
-import { useHistory } from "react-router-dom";
 
 import Header from "../../components/Header/index";
 import CartTable from "../../components/CartTable/index";
@@ -18,34 +15,13 @@ const CartPage = ({
     changeProductCount,
     increseProductCount,
     decreseProductCount,
-    clearCart,
+    createNewOrder,
 }) => {
-    const history = useHistory();
-
     const createOrder = () => {
         const order = products.map((el) => {
             return { productId: el.id, count: el.count };
         });
-        api({
-            method: "post",
-            url: "/orders",
-            headers: {
-                "Content-Type": " application/json",
-                Authorization: API_TOKEN,
-            },
-            data: JSON.stringify({
-                order: {
-                    pieces: order,
-                },
-            }),
-        })
-            .then((response) => {
-                history.push(`/orders/${response.data.id}`);
-                clearCart();
-            })
-            .catch((error) => {
-                throw new Error(error);
-            });
+        createNewOrder(order);
     };
 
     return (
@@ -88,8 +64,8 @@ CartPage.propTypes = {
     changeProductCount: PropTypes.func,
     increseProductCount: PropTypes.func,
     decreseProductCount: PropTypes.func,
-    clearCart: PropTypes.func,
     openModal: PropTypes.func,
+    createNewOrder: PropTypes.func,
 };
 
 export default CartPage;

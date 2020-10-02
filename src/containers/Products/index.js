@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import api from "../../services/api";
 import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
+import { convertUrlToParams } from "../../helpers/helpers";
 
 import Product from "../../components/Product/index";
 import Header from "../../components/Header/index";
@@ -26,15 +27,18 @@ const Products = ({
     token,
     title,
     editable,
+    setCurrentPage,
+    productsCount,
+    productsRequest,
 }) => {
     const [newOrigins, setNewOrigins] = useState([]);
     const [minValue, setminValue] = useState(0);
-    const [maxValue, setmaxValue] = useState(0);
+    const [maxValue, setmaxValue] = useState(10000);
     const [pagesCount, setPagesCount] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
+    const history = useHistory();
 
     const getPage = (event) => {
-        setCurrentPage(+event.target.innerText);
+        setCurrentPage(Number(event.target.innerText));
     };
 
     const getProductsByOrigin = (e) => {
@@ -57,28 +61,57 @@ const Products = ({
         setCurrentPage(1);
         setPerPage(e.target.value);
     };
+    let requestOptions = {};
 
     useEffect(() => {
+        if (history.action === "PUSH") {
+            history.push({
+                pathname: history.location.pathname,
+                search: `?`,
+            });
+        }
+        requestOptions = convertUrlToParams(
+            history.location.search.replace("?", "")
+        );
+        requestOptions.perPage
+            ? setPerPage(requestOptions.perPage)
+            : setPerPage(50);
+        if (requestOptions.origins) {
+            const originsArray = requestOptions.origins.split(",");
+            for (let i = 0; i < originsArray.length; i++) {
+                setOrigins(originsArray[i], true);
+            }
+        } else {
+            for (let i = 0; i < origins.length; i++) {
+                setOrigins("", false);
+            }
+        }
+        changePriceRange(
+            Number(requestOptions.minPrice),
+            Number(requestOptions.maxPrice)
+        );
+        requestOptions.page
+            ? setCurrentPage(Number(requestOptions.page))
+            : setCurrentPage(1);
+    }, []);
+
+    useEffect(() => {
+        const url = editable
+            ? `/products?${queryOptions}&editable=true`
+            : `/products?${queryOptions}`;
+        history.push({
+            pathname: history.location.pathname,
+            search: `?${queryOptions}`,
+        });
+
         const headers = {
             "Content-Type": "application/json",
         };
         if (token) {
             headers["Authorization"] = token;
         }
-        api({
-            method: "get",
-            url: `/products?${queryOptions}&page=${currentPage}&${editable}`,
-            headers: headers,
-        })
-            .then((response) => {
-                getProducts(response.data.items);
-                setPagesCount(
-                    Math.ceil(response.data.totalItems / response.data.perPage)
-                );
-            })
-            .catch((error) => {
-                throw new Error("Error with API");
-            });
+        productsRequest({ url, headers });
+        setPagesCount(Math.ceil(productsCount / options.perPage));
 
         let originId = 0;
         const newOrigins = origins.map((el) => {
@@ -96,17 +129,22 @@ const Products = ({
             };
         });
         setNewOrigins(newOrigins);
-
-        setminValue(options.minPrice);
-        setmaxValue(options.maxPrice);
+        if (options.minPrice) {
+            setminValue(options.minPrice);
+        }
+        if (options.maxPrice) {
+            setmaxValue(options.maxPrice);
+        }
     }, [
         options,
-        currentPage,
         getProducts,
         queryOptions,
         origins,
         token,
         editable,
+        history,
+        productsCount,
+        productsRequest,
     ]);
 
     let pages = [];
@@ -152,7 +190,7 @@ const Products = ({
                 <Pagination
                     pages={pages}
                     setCurrentPage={setCurrentPage}
-                    currentPage={currentPage}
+                    currentPage={options.currentPage}
                     getPage={getPage}
                 />
             )}
@@ -171,6 +209,7 @@ Products.propTypes = {
         origins: PropTypes.array,
         minPrice: PropTypes.number,
         maxPrice: PropTypes.number,
+        currentPage: PropTypes.number,
     }),
     queryOptions: PropTypes.string,
     setPerPage: PropTypes.func,
@@ -181,6 +220,9 @@ Products.propTypes = {
     token: PropTypes.string,
     title: PropTypes.string,
     editable: PropTypes.string,
+    setCurrentPage: PropTypes.func,
+    productsCount: PropTypes.number,
+    productsRequest: PropTypes.func,
 };
 
 export default Products;

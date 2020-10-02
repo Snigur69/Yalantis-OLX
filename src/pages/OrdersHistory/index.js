@@ -1,31 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import api from "../../services/api";
-import { API_TOKEN } from "../../constants/constants";
 
 import Header from "../../components/Header/index";
 import styles from "./styles.module.css";
 
-const OrdersHistory = ({ openModal, summaryPrice }) => {
-    const [orders, setOrders] = useState([]);
-
+const OrdersHistory = ({ openModal, summaryPrice, orders, ordersRequest }) => {
     useEffect(() => {
-        api({
-            method: "get",
-            url: "/orders",
-            headers: {
-                "Content-Type": " application/json",
-                Authorization: API_TOKEN,
-            },
-        })
-            .then((response) => {
-                setOrders(response.data.items);
-            })
-            .catch((error) => {
-                throw new Error(error);
-            });
-    }, []);
+        ordersRequest();
+    }, [ordersRequest]);
 
     return (
         <div className={styles.history}>
@@ -47,6 +30,12 @@ const OrdersHistory = ({ openModal, summaryPrice }) => {
 OrdersHistory.propTypes = {
     summaryPrice: PropTypes.number,
     openModal: PropTypes.func,
+    order: PropTypes.shape({
+        id: PropTypes.string,
+        createdAt: PropTypes.string,
+        pieces: PropTypes.array,
+    }),
+    ordersRequest: PropTypes.func,
 };
 
 export default OrdersHistory;

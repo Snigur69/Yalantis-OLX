@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import api from "../../services/api";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Header from "../../components/Header/index";
@@ -8,18 +7,18 @@ import defaultImg from "../../assets/img/productImage.gif";
 import loader from "../../assets/img/loader.gif";
 import styles from "./styles.module.css";
 
-const ProductPage = ({ summaryPrice, addToCart, match, openModal }) => {
-    const [product, setProduct] = useState({});
-
+const ProductPage = ({
+    summaryPrice,
+    addToCart,
+    match,
+    openModal,
+    currentProductRequest,
+    product,
+}) => {
     useEffect(() => {
-        api.get(`/products/${match.params.id}`)
-            .then((response) => {
-                setProduct(response.data);
-            })
-            .catch((error) => {
-                throw new Error("Error with API");
-            });
-    }, [match.params.id]);
+        const url = `/products/${match.params.id}`;
+        currentProductRequest(url);
+    }, [match.params.id, currentProductRequest]);
     return product.id ? (
         <div>
             <Header openModal={openModal} summaryPrice={summaryPrice} />
@@ -57,6 +56,13 @@ ProductPage.propTypes = {
     addToCart: PropTypes.func,
     match: PropTypes.object,
     openModal: PropTypes.func,
+    currentProductRequest: PropTypes.func,
+    product: PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+        price: PropTypes.number,
+        origin: PropTypes.string,
+    }),
 };
 
 export default ProductPage;

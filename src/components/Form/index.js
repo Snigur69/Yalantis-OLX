@@ -44,7 +44,9 @@ const Form = ({
                             value: string().required("Поле обязательное!"),
                         }),
                     })}
-                    onSubmit={(values) => submitForm(values)}
+                    onSubmit={(values, { setSubmitting }) =>
+                        submitForm(values, { setSubmitting })
+                    }
                 >
                     {({
                         values,
